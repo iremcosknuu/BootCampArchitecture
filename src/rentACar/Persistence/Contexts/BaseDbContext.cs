@@ -21,6 +21,7 @@ namespace Persistence
         public DbSet<Fuel> Fuels { get; set; }
         public DbSet<Transmission> Transmissions { get; set; }
         public DbSet<Rental> Rentals { get; set; }
+        public DbSet<Maintenance> Maintenances { get; set; }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
@@ -105,6 +106,18 @@ namespace Persistence
                 b.Property(p => p.ReturnKilometer).HasColumnName("ReturnKilometer");
                 b.Property(p => p.CarId).HasColumnName("CarId");
                 b.HasOne(p => p.Car);
+            });
+
+            modelBuilder.Entity<Maintenance>(b =>
+            { 
+                b.ToTable("Maintenances").HasKey(k => k.Id);
+                b.Property(p => p.Id).HasColumnName("Id");
+                b.Property(p => p.Description).HasColumnName("Description");
+                b.Property(p => p.MaintenanceDate).HasColumnName("MaintenanceDate");
+                b.Property(p => p.ReturnDate).HasColumnName("ReturnDate");
+                b.Property(p => p.CarId).HasColumnName("CarId");
+                b.HasOne(p => p.Car);
+
             });
 
             var brand1 = new Brand(1, "BMW");

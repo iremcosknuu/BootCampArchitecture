@@ -174,6 +174,39 @@ namespace Persistence.Migrations
                         });
                 });
 
+            modelBuilder.Entity("Domain.Entities.Maintenance", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasColumnName("Id");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
+
+                    b.Property<int>("CarId")
+                        .HasColumnType("int")
+                        .HasColumnName("CarId");
+
+                    b.Property<string>("Description")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)")
+                        .HasColumnName("Description");
+
+                    b.Property<DateTime>("MaintenanceDate")
+                        .HasColumnType("datetime2")
+                        .HasColumnName("MaintenanceDate");
+
+                    b.Property<DateTime>("ReturnDate")
+                        .HasColumnType("datetime2")
+                        .HasColumnName("ReturnDate");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("CarId");
+
+                    b.ToTable("Maintenances", (string)null);
+                });
+
             modelBuilder.Entity("Domain.Entities.Model", b =>
                 {
                     b.Property<int>("Id")
@@ -263,7 +296,7 @@ namespace Persistence.Migrations
                         .HasColumnType("float")
                         .HasColumnName("RentKilometer");
 
-                    b.Property<DateTime>("ReturnDate")
+                    b.Property<DateTime?>("ReturnDate")
                         .HasColumnType("datetime2")
                         .HasColumnName("ReturnDate");
 
@@ -276,17 +309,6 @@ namespace Persistence.Migrations
                     b.HasIndex("CarId");
 
                     b.ToTable("Rentals", (string)null);
-
-                    b.HasData(
-                        new
-                        {
-                            Id = 1,
-                            CarId = 1,
-                            RentDate = new DateTime(2022, 2, 4, 0, 0, 0, 0, DateTimeKind.Local),
-                            RentKilometer = 13000.0,
-                            ReturnDate = new DateTime(2022, 2, 6, 0, 0, 0, 0, DateTimeKind.Local),
-                            ReturnKilometer = 13500.0
-                        });
                 });
 
             modelBuilder.Entity("Domain.Entities.Transmission", b =>
@@ -337,6 +359,17 @@ namespace Persistence.Migrations
                     b.Navigation("Color");
 
                     b.Navigation("Model");
+                });
+
+            modelBuilder.Entity("Domain.Entities.Maintenance", b =>
+                {
+                    b.HasOne("Domain.Entities.Car", "Car")
+                        .WithMany()
+                        .HasForeignKey("CarId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Car");
                 });
 
             modelBuilder.Entity("Domain.Entities.Model", b =>

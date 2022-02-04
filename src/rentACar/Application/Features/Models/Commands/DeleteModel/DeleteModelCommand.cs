@@ -10,11 +10,11 @@ using System.Threading.Tasks;
 
 namespace Application.Features.Models.Commands.DeleteModel
 {
-    public class DeleteModelCommand:IRequest
+    public class DeleteModelCommand:IRequest<Model>
     {
         public int Id { get; set; }
 
-        public class DeleteModelCommandHandler : IRequestHandler<DeleteModelCommand>
+        public class DeleteModelCommandHandler : IRequestHandler<DeleteModelCommand,Model>
         {
             IModelRepository _modelRepository;
             IMapper _mapper;
@@ -25,12 +25,12 @@ namespace Application.Features.Models.Commands.DeleteModel
                 _mapper = mapper;
             }
 
-            public async Task<Unit> Handle(DeleteModelCommand request, CancellationToken cancellationToken)
+            public async Task<Model> Handle(DeleteModelCommand request, CancellationToken cancellationToken)
             {
                 var mappedModel = _mapper.Map<Model>(request);
 
-                await _modelRepository.DeleteAsync(mappedModel);
-                return Unit.Value;
+                var deletedModel =  await _modelRepository.DeleteAsync(mappedModel);
+                return deletedModel;
             }
         }
     }

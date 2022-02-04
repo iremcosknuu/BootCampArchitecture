@@ -1,4 +1,5 @@
-﻿using Application.Services.Repositories;
+﻿using Application.Features.Rentals.Rules;
+using Application.Services.Repositories;
 using AutoMapper;
 using Domain.Entities;
 using MediatR;
@@ -22,16 +23,23 @@ namespace Application.Features.Rentals.Commands.CreateRental
         {
             IRentalRepository _rentalRepository;
             IMapper _mapper;
+            RentalBusienessRules _rentalBusienessRules;
 
-            public CreateRentalCommandHandler(IRentalRepository rentalRepository, IMapper mapper )
+            public CreateRentalCommandHandler(IRentalRepository rentalRepository, IMapper mapper, RentalBusienessRules rentalBusienessRules)
             {
                 _rentalRepository = rentalRepository;
                 _mapper = mapper;
+                _rentalBusienessRules = rentalBusienessRules;
             }
 
-            public Task<Rental> Handle(CreateRentalCommand request, CancellationToken cancellationToken)
+            public async Task<Rental> Handle(CreateRentalCommand request, CancellationToken cancellationToken)
             {
-                throw new NotImplementedException();
+                _rentalBusienessRules.CheckIfCarIsRented(request.CarId);
+                var  mappedRental = _mapper.Map<Rental>(request);
+
+                var createdRental = await _rentalRepository.AddAsync(mappedRental);
+                return createdRental;
+
             }
         }
     }

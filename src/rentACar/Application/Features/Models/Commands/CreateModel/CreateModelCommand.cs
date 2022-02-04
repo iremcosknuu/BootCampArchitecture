@@ -24,18 +24,18 @@ namespace Application.Features.Models.Commands.CreateModel
         {
             IModelRepository _modelRepository;
             IMapper _mapper;
-            ModelBussienesRules _modelBussinessRules;
+            ModelBusienesRules _modelBusinessRules;
 
-            public CreateModelCommandHandler(IModelRepository modelRepository, IMapper mapper, ModelBussienesRules modelBussinessRules)
+            public CreateModelCommandHandler(IModelRepository modelRepository, IMapper mapper, ModelBusienesRules modelBusinessRules)
             {
                 _modelRepository = modelRepository;
                 _mapper = mapper;
-                _modelBussinessRules = modelBussinessRules;
+                _modelBusinessRules = modelBusinessRules;
             }
 
             public async Task<Model> Handle(CreateModelCommand request, CancellationToken cancellationToken)
             {
-                await _modelBussinessRules.ModelNameCanNotBeDuplicatedWhenInserted(request.Name);
+                await _modelBusinessRules.ModelNameCanNotBeDuplicatedWhenInserted(request.Name);
                 var mappedModel = _mapper.Map<Model>(request);
 
                 var createModel = await _modelRepository.AddAsync(mappedModel);

@@ -16,5 +16,16 @@ namespace Persistence.Repositories
         {
 
         }
+
+        public bool CheckIfCarIsRented(int carId)
+        {
+            var result = Context.Rentals.Where(r => r.CarId == carId).FirstOrDefault();
+            if (result == null)
+            {
+                return false;
+            }
+
+            return true;
+        }
     }
 }

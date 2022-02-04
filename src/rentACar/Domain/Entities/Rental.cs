@@ -14,7 +14,7 @@ namespace Domain.Entities
 
         }
 
-        public Rental(int id,DateTime rentDate, DateTime returnDate, double rentKilometer, double returnKilometer, int carId)
+        public Rental(int id,DateTime rentDate, DateTime returnDate, double rentKilometer, double returnKilometer, int carId):this()
         {
             Id = id;
             RentDate = rentDate;
@@ -25,7 +25,7 @@ namespace Domain.Entities
         }
 
         public DateTime RentDate { get; set; }
-        public DateTime ReturnDate { get; set; }
+        public DateTime? ReturnDate { get; set; }
         public double RentKilometer { get; set; }
         public double ReturnKilometer { get; set; }
         public int CarId { get; set; }

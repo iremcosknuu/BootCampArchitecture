@@ -19,9 +19,11 @@ namespace Persistence
                             (configuration.GetConnectionString("rentACarConnectionString")));
 
             services.AddScoped<IBrandRepository, BrandRepository>();
+            services.AddScoped<IColorRepository, ColorRespository>();
             services.AddScoped<IModelRepository, ModelRepository>();
             services.AddScoped<ICarRepository, CarRepository>();
             services.AddScoped<IRentalRepository, RentalRepository>();
+            services.AddScoped<IMaintenanceRepository, MaintenanceRepository>();
 
             return services;
         }

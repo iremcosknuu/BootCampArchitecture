@@ -1,5 +1,7 @@
 ﻿using Application.Features.Brands.Rules;
 using Application.Features.Cars.Rules;
+using Application.Features.Colors.Rules;
+using Application.Features.Maintenances.Rules;
 using Application.Features.Rentals.Rules;
 using Core.Application.Pipelines.Validation;
 using FluentValidation;
@@ -20,13 +22,14 @@ namespace Application
         {
             services.AddAutoMapper(Assembly.GetExecutingAssembly());
             services.AddMediatR(Assembly.GetExecutingAssembly());
+            services.AddValidatorsFromAssembly(Assembly.GetExecutingAssembly());
 
             services.AddScoped<BrandBusinessRules>();
-            services.AddScoped<ModelBussienesRules>();
+            services.AddScoped<ColorBusienessRules>();
+            services.AddScoped<ModelBusienesRules>();
             services.AddScoped<CarBusienessRules>();
             services.AddScoped<RentalBusienessRules>();
-
-            services.AddValidatorsFromAssembly(Assembly.GetExecutingAssembly());
+            services.AddScoped<MaintenanceBusienessRules>();
 
             services.AddTransient(typeof(IPipelineBehavior<,>), typeof(RequestValidationBehavior<,>));
 

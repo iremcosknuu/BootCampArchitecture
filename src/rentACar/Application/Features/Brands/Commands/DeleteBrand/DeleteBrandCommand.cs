@@ -10,11 +10,11 @@ using System.Threading.Tasks;
 
 namespace Application.Features.Brands.Commands.DeleteBrand
 {
-    public class DeleteBrandCommand:IRequest
+    public class DeleteBrandCommand:IRequest<Brand>
     {
         public int Id { get; set; }
 
-        public class DeleteBrandCommandHandler:IRequestHandler<DeleteBrandCommand>
+        public class DeleteBrandCommandHandler:IRequestHandler<DeleteBrandCommand,Brand>
         {
             IBrandRepository _brandRespository;
             IMapper _mapper;
@@ -25,11 +25,11 @@ namespace Application.Features.Brands.Commands.DeleteBrand
                 _mapper = mapper;
             }
 
-            public async Task<Unit> Handle(DeleteBrandCommand request, CancellationToken cancellationToken)
+            public async Task<Brand> Handle(DeleteBrandCommand request, CancellationToken cancellationToken)
             {
                 var mapperBrand = _mapper.Map<Brand>(request);
-                await _brandRespository.DeleteAsync(mapperBrand);
-                return Unit.Value;
+                var deletedBrand = await _brandRespository.DeleteAsync(mapperBrand);
+                return deletedBrand;
             }
         }
     }

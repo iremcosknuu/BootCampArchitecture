@@ -9,7 +9,6 @@
   <ItemGroup>
     <PackageReference Include="AutoMapper" Version="11.0.0" />
     <PackageReference Include="AutoMapper.Extensions.Microsoft.DependencyInjection" Version="11.0.0" />
-    <PackageReference Include="MailKit" Version="3.1.1" />
     <PackageReference Include="MediatR" Version="10.0.1" />
     <PackageReference Include="MediatR.Extensions.Microsoft.DependencyInjection" Version="10.0.1" />
     <PackageReference Include="Microsoft.EntityFrameworkCore" Version="6.0.1" />
@@ -26,13 +25,10 @@
   <ItemGroup>
     <Folder Include="Features\Brands\Tests\" />
     <Folder Include="Features\Cars\Tests\" />
-    <Folder Include="Features\Colors\Commands\" />
     <Folder Include="Features\Colors\Dtos\" />
     <Folder Include="Features\Colors\Models\" />
     <Folder Include="Features\Colors\Tests\" />
-    <Folder Include="Features\Colors\Rules\" />
     <Folder Include="Features\Colors\Queries\" />
-    <Folder Include="Features\Colors\Profiles\" />
     <Folder Include="Features\Fuels\Commands\" />
     <Folder Include="Features\Fuels\Dtos\" />
     <Folder Include="Features\Fuels\Models\" />
@@ -40,11 +36,8 @@
     <Folder Include="Features\Fuels\Queries\" />
     <Folder Include="Features\Fuels\Rules\" />
     <Folder Include="Features\Fuels\Tests\" />
+    <Folder Include="Features\Maintenances\Tests\" />
     <Folder Include="Features\Models\Tests\" />
-    <Folder Include="Features\Rentals\Dtos\" />
-    <Folder Include="Features\Rentals\Models\" />
-    <Folder Include="Features\Rentals\Profiles\" />
-    <Folder Include="Features\Rentals\Queries\" />
     <Folder Include="Features\Rentals\Tests\" />
     <Folder Include="Features\Transmissions\Commands\" />
     <Folder Include="Features\Transmissions\Dtos\" />

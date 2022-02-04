@@ -10,12 +10,12 @@ using System.Threading.Tasks;
 
 namespace Application.Features.Brands.Commands.UpdateBrand
 {
-    public class UpdateBrandCommand:IRequest
+    public class UpdateBrandCommand:IRequest<Brand>
     {
         public int Id { get; set; }
         public string Name { get; set; }
 
-        public class UpdateBrandResponseHandler : IRequestHandler<UpdateBrandCommand>
+        public class UpdateBrandResponseHandler : IRequestHandler<UpdateBrandCommand,Brand>
         {
             IBrandRepository _brandRepository;
             IMapper _mapper;
@@ -26,12 +26,12 @@ namespace Application.Features.Brands.Commands.UpdateBrand
                 _mapper = mapper;
             }
 
-            public async Task<Unit> Handle(UpdateBrandCommand request, CancellationToken cancellationToken)
+            public async Task<Brand> Handle(UpdateBrandCommand request, CancellationToken cancellationToken)
             {
                 var mappedBrand = _mapper.Map<Brand>(request);
 
-                await _brandRepository.UpdateAsync(mappedBrand);
-                return Unit.Value;
+                var updatedBrand = await _brandRepository.UpdateAsync(mappedBrand);
+                return updatedBrand;
             }
         }
     }

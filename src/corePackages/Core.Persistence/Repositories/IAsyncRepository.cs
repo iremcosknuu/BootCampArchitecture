@@ -11,8 +11,7 @@ namespace Core.Persistence.Repositories
 {
     public interface IAsyncRepository<T> where T : Entity
     {
-        //Eksiği olanlar : Linq, Predicate, Expression, Func
-        //Bu reponun asenkron olmayan versiyonunu yazınız
+
         Task<T> GetAsync(Expression<Func<T, bool>> predicate);
         Task<IPaginate<T>> GetListAsync(Expression<Func<T, bool>> predicate = null,
                              Func<IQueryable<T>, IOrderedQueryable<T>> orderBy = null,
@@ -25,7 +24,7 @@ namespace Core.Persistence.Repositories
         IQueryable<T> Query();
 
         Task<T> AddAsync(T entity);
-        Task UpdateAsync(T entity);
-        Task DeleteAsync(T entity);
+        Task<T> UpdateAsync(T entity);
+        Task<T> DeleteAsync(T entity);
     }
 }

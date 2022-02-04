@@ -10,11 +10,11 @@ using System.Threading.Tasks;
 
 namespace Application.Features.Cars.Commands.DeleteCar
 {
-    public class DeleteCarCommand:IRequest
+    public class DeleteCarCommand:IRequest<Car>
     {
         public int Id { get; set; }
 
-        public class DeleteCarCommandHandler : IRequestHandler<DeleteCarCommand> 
+        public class DeleteCarCommandHandler : IRequestHandler<DeleteCarCommand,Car> 
         {
             ICarRepository _carRepository;
             IMapper _mapper;
@@ -26,11 +26,11 @@ namespace Application.Features.Cars.Commands.DeleteCar
             }
 
 
-            public async Task<Unit> Handle(DeleteCarCommand request, CancellationToken cancellationToken)
+            public async Task<Car> Handle(DeleteCarCommand request, CancellationToken cancellationToken)
             {
                 var mappedCar = _mapper.Map<Car>(request);
-                await _carRepository.DeleteAsync(mappedCar);
-                return Unit.Value;
+                var deletedCar = await _carRepository.DeleteAsync(mappedCar);
+                return deletedCar;
             }
         }
     }

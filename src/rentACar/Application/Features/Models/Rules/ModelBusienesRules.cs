@@ -8,11 +8,11 @@ using System.Threading.Tasks;
 
 namespace Application.Features.Brands.Rules
 {
-    public class ModelBussienesRules
+    public class ModelBusienesRules
     {
         IModelRepository _modelRepository;
 
-        public ModelBussienesRules(IModelRepository modelRepository)
+        public ModelBusienesRules(IModelRepository modelRepository)
         {
             _modelRepository = modelRepository;
         }
