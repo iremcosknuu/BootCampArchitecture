@@ -1,4 +1,5 @@
 ﻿using Application.Features.Cars.Models;
+using Application.Features.Rentals.Models;
 using Application.Services.Repositories;
 using AutoMapper;
 using Core.Application.Requests;
@@ -12,11 +13,11 @@ using System.Threading.Tasks;
 
 namespace Application.Features.Rentals.Queries.GetRentalList
 {
-    public class GetRentalListQuery : IRequest<CarListModel>
+    public class GetRentalListQuery : IRequest<RentalListModel>
     {
         public PageRequest PageRequest { get; set; }
 
-        public class GetRentalListHandler : IRequestHandler<GetRentalListQuery , CarListModel>
+        public class GetRentalListHandler : IRequestHandler<GetRentalListQuery , RentalListModel>
         {
             IRentalRepository _rentalRepository;
             IMapper _mapper;
@@ -27,7 +28,7 @@ namespace Application.Features.Rentals.Queries.GetRentalList
                 _mapper = mapper;
             }
 
-            public async Task<CarListModel> Handle(GetRentalListQuery request, CancellationToken cancellationToken)
+            public async Task<RentalListModel> Handle(GetRentalListQuery request, CancellationToken cancellationToken)
             {
                 var rentals = await _rentalRepository.GetListAsync(
                     include: r => r
@@ -36,7 +37,7 @@ namespace Application.Features.Rentals.Queries.GetRentalList
                     size: request.PageRequest.PageSize
                     );
 
-                var mappedRentals = _mapper.Map<CarListModel>(rentals);
+                var mappedRentals = _mapper.Map<RentalListModel>(rentals);
                 return mappedRentals;
             }
         }

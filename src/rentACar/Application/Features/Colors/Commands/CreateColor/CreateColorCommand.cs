@@ -32,7 +32,7 @@ namespace Application.Features.Colors.Commands.CreateColor
             {
                 await _colorBusienessRules.ColorNameCanNotBeDuplicatedWhenInserted(request.Name);
 
-                var mappedColor = _mapper.Map<Color>(request.Name);
+                var mappedColor = _mapper.Map<Color>(request);
                 var createdColor = await _colorRepository.AddAsync(mappedColor);
                 return createdColor;
             }

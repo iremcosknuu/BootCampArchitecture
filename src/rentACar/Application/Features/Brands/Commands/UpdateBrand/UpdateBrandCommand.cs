@@ -15,12 +15,12 @@ namespace Application.Features.Brands.Commands.UpdateBrand
         public int Id { get; set; }
         public string Name { get; set; }
 
-        public class UpdateBrandResponseHandler : IRequestHandler<UpdateBrandCommand,Brand>
+        public class UpdateBrandCommandHandler : IRequestHandler<UpdateBrandCommand,Brand>
         {
             IBrandRepository _brandRepository;
             IMapper _mapper;
 
-            public UpdateBrandResponseHandler(IBrandRepository brandRepository, IMapper mapper)
+            public UpdateBrandCommandHandler(IBrandRepository brandRepository, IMapper mapper)
             {
                 _brandRepository = brandRepository;
                 _mapper = mapper;

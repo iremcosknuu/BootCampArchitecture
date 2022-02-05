@@ -32,14 +32,14 @@ namespace WebAPI.Controllers
         public async Task<IActionResult> Update([FromBody]UpdateBrandCommand updateBrandCommand)
         {
             var result = await Mediator.Send(updateBrandCommand);
-            return Ok();
+            return Ok(result);
         }
 
         [HttpDelete("delete")]
         public async Task<IActionResult> Delete([FromBody] DeleteBrandCommand deleteBrandCommand)
         {
             var result = await Mediator.Send(deleteBrandCommand);
-            return Ok();
+            return Ok(result);
         }
     }
 }

@@ -1,8 +1,10 @@
 ﻿using Application.Features.Brands.Rules;
 using Application.Features.Cars.Rules;
 using Application.Features.Colors.Rules;
+using Application.Features.Fuels.Rules;
 using Application.Features.Maintenances.Rules;
 using Application.Features.Rentals.Rules;
+using Application.Features.Transmissions.Rules;
 using Core.Application.Pipelines.Validation;
 using FluentValidation;
 using MediatR;
@@ -27,6 +29,8 @@ namespace Application
             services.AddScoped<BrandBusinessRules>();
             services.AddScoped<ColorBusienessRules>();
             services.AddScoped<ModelBusienesRules>();
+            services.AddScoped<TransmissionBusienessRules>();
+            services.AddScoped<FuelBusienessRules>();
             services.AddScoped<CarBusienessRules>();
             services.AddScoped<RentalBusienessRules>();
             services.AddScoped<MaintenanceBusienessRules>();

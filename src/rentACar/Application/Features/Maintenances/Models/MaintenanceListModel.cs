@@ -10,6 +10,6 @@ namespace Application.Features.Maintenances.Models
 {
     public class MaintenanceListModel: BasePageableModel
     {
-        public List<MaintenanceListDto> Items { get; set; }
+        public IList<MaintenanceListDto> Items { get; set; }
     }
 }
