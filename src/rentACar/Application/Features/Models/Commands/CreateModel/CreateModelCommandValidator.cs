@@ -33,5 +33,5 @@ namespace Application.Features.Models.Commands.CreateModel
             return url.EndsWith(".png") || url.EndsWith(".jpg") || url.EndsWith(".jpeg");
         }
     }
-    }
+    
 }
