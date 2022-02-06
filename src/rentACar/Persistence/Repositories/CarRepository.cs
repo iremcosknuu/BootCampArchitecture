@@ -1,6 +1,7 @@
 ﻿using Application.Services.Repositories;
 using Core.Persistence.Repositories;
 using Domain.Entities;
+using Domain.Enums;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -14,6 +15,19 @@ namespace Persistence.Repositories
         public CarRepository(BaseDbContext context) : base(context)
         {
 
+        }
+
+        public bool ChangeCarState(int carId,CarState carState)
+        {
+             var result = Context.Cars.Where(c => c.Id == carId).FirstOrDefault();
+             if(result == null)
+            {
+                return false;
+            }
+            result.CarState = carState;
+            Context.Entry(result).Property(r => r.CarState).IsModified = true;
+            Context.SaveChanges();
+            return true;
         }
     }
 }

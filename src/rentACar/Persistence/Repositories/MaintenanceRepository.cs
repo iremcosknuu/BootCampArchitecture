@@ -15,5 +15,15 @@ namespace Persistence.Repositories
         {
 
         }
+
+        public bool CheckIfCarIsMaintenance(int carId)
+        {
+            var result = Context.Maintenances.Where(m => m.ReturnDate == null && m.CarId == carId).FirstOrDefault();
+            if(result == null)
+            {
+                return false;
+            }
+            return true;
+        }
     }
 }

@@ -10,7 +10,7 @@ namespace Application.Features.Rentals.Dtos
     {
         public int Id { get; set; }
         public DateTime RentDate { get; set; }
-        public DateTime ReturnDate { get; set; }
+        public DateTime? ReturnDate { get; set; }
         public double RentKilometer { get; set; }
         public double ReturnKilometer { get; set; }
         public int CarId { get; set; }

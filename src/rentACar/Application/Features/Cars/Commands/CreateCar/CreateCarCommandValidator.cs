@@ -19,12 +19,12 @@ namespace Application.Features.Cars.Commands.CreateCar
                 RuleFor(c => c.ModelId).GreaterThan(0);
                 RuleFor(c => c.Plate).Length(6, 9);
                 RuleFor(c => c.Plate).Must(StartWithNumber);
-                //RuleFor(c => c.ModelYear).Must(BeAfter2015).WithMessage("Eklemek istediğiniz araçlar 2015 öncesi olamaz!");
+                RuleFor(c => c.ModelYear).Must(BeAfter2000).WithMessage("Eklemek istediğiniz araçlar 2000 öncesi olamaz!");
             }
 
-            private bool BeAfter2015(int modelYear)
+            private bool BeAfter2000(short modelYear)
             {
-                return modelYear >= 2015;
+                return modelYear >= 2000;
             }
 
             private bool StartWithNumber(string plate)

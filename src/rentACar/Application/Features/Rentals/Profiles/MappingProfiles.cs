@@ -21,7 +21,7 @@ namespace Application.Features.Rentals.Profiles
             CreateMap<Rental, UpdateRentalCommand>().ReverseMap();
             CreateMap<Rental, DeleteRentalCommand>().ReverseMap();
             CreateMap<Rental, RentalListDto>()
-                .ForMember(m => m.CarId, opt => opt.MapFrom(m => m.Car));
+                .ForMember(m => m.CarId, opt => opt.MapFrom(m => m.Car.Id));
             CreateMap<Rental, RentalListModel>().ReverseMap();
         }
     }
