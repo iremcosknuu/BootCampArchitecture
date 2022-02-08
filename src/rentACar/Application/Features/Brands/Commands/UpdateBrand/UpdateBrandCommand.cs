@@ -1,4 +1,5 @@
-﻿using Application.Services.Repositories;
+﻿using Application.Features.Brands.Dtos;
+using Application.Services.Repositories;
 using AutoMapper;
 using Domain.Entities;
 using MediatR;
@@ -10,12 +11,12 @@ using System.Threading.Tasks;
 
 namespace Application.Features.Brands.Commands.UpdateBrand
 {
-    public class UpdateBrandCommand:IRequest<Brand>
+    public class UpdateBrandCommand:IRequest<UpdateBrandListDto>
     {
         public int Id { get; set; }
         public string Name { get; set; }
 
-        public class UpdateBrandCommandHandler : IRequestHandler<UpdateBrandCommand,Brand>
+        public class UpdateBrandCommandHandler : IRequestHandler<UpdateBrandCommand, UpdateBrandListDto>
         {
             IBrandRepository _brandRepository;
             IMapper _mapper;
@@ -26,12 +27,14 @@ namespace Application.Features.Brands.Commands.UpdateBrand
                 _mapper = mapper;
             }
 
-            public async Task<Brand> Handle(UpdateBrandCommand request, CancellationToken cancellationToken)
+            public async Task<UpdateBrandListDto> Handle(UpdateBrandCommand request, CancellationToken cancellationToken)
             {
                 var mappedBrand = _mapper.Map<Brand>(request);
 
                 var updatedBrand = await _brandRepository.UpdateAsync(mappedBrand);
-                return updatedBrand;
+
+                UpdateBrandListDto updateBrandListDto = _mapper.Map<UpdateBrandListDto>(updatedBrand);
+                return updateBrandListDto;
             }
         }
     }

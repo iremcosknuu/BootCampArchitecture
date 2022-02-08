@@ -19,8 +19,20 @@ namespace Application.Features.Cars.Profiles
         public MappingProfiles()
         {
             CreateMap<Car, CreateCarCommand>().ReverseMap();
+            CreateMap<Car, CreateCarListDto>()
+                .ForMember(c => c.ColorId, opt => opt.MapFrom(c => c.Color.Id))
+                .ForMember(c => c.ModelId, opt => opt.MapFrom(c => c.Model.Id));
+
             CreateMap<Car, UpdateCarCommand>().ReverseMap();
+            CreateMap<Car, UpdateCarListDto>()
+                .ForMember(c => c.ColorId, opt => opt.MapFrom(c => c.Color.Id))
+                .ForMember(c => c.ModelId, opt => opt.MapFrom(c => c.Model.Id));
+
             CreateMap<Car, DeleteCarCommand>().ReverseMap();
+            CreateMap<Car, DeleteCarListDto>()
+                .ForMember(c => c.ColorId, opt => opt.MapFrom(c => c.Color.Id))
+                .ForMember(c => c.ModelId, opt => opt.MapFrom(c => c.Model.Id));
+
             CreateMap<Car, CarListDto>()
                 .ForMember(c => c.ColorName, opt => opt.MapFrom(c => c.Color.Name))
                 .ForMember(c => c.ModelName, opt => opt.MapFrom(c => c.Model.Name));
