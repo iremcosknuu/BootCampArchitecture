@@ -18,9 +18,19 @@ namespace Application.Features.IndividualCustomers.Profiles
     {
         public MappingProfiles()
         {
-            CreateMap<IndividualCustomer, CreateIndividualCustomerCommand>().ReverseMap();
+            CreateMap<IndividualCustomer, CreateIndividualCustomerCommand>()
+                .ForMember(x => x.CustomerId,opt => opt.MapFrom(m => m.Customer.Id))
+                .ReverseMap();
+            CreateMap<IndividualCustomer, CreateIndividualCustomerListDto>()
+                .ForMember(x => x.CustomerId, opt => opt.MapFrom(m => m.Customer.Id))
+                .ReverseMap();
+
             CreateMap<IndividualCustomer, UpdateIndividualCustomerCommand>().ReverseMap();
+            CreateMap<IndividualCustomer, UpdateIndividualCustomerListDto>().ReverseMap();
+
             CreateMap<IndividualCustomer, DeleteIndividualCustomerCommand>().ReverseMap();
+            CreateMap<IndividualCustomer, DeleteIndividualCustomerListDto>().ReverseMap();
+
             CreateMap<IndividualCustomer, IndividualCustomerListDto>().ReverseMap();
             CreateMap<IPaginate<IndividualCustomer>, IndividualCustomerListModel>().ReverseMap();
         }

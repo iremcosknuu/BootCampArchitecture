@@ -19,6 +19,7 @@ namespace Application.Features.Cars.Commands.UpdateCar
         public int ModelId { get; set; }
         public string Plate { get; set; }
         public short ModelYear { get; set; }
+        public int FindexScore { get; set; }
 
         public class UpdateCarCommandHandler : IRequestHandler<UpdateCarCommand, UpdateCarListDto>
         {

@@ -1,4 +1,5 @@
 ﻿using Application.Features.Brands.Rules;
+using Application.Features.Models.Dtos;
 using Application.Services.Repositories;
 using AutoMapper;
 using Domain.Entities;
@@ -11,7 +12,7 @@ using System.Threading.Tasks;
 
 namespace Application.Features.Models.Commands.CreateModel
 {
-    public class CreateModelCommand : IRequest<Model>
+    public class CreateModelCommand : IRequest<CreateModelListDto>
     {
         public string Name { get; set; }
         public double DailyPrice { get; set; }
@@ -20,7 +21,7 @@ namespace Application.Features.Models.Commands.CreateModel
         public int BrandId { get; set; }
         public string ImageUrl { get; set; }
 
-        public class CreateModelCommandHandler : IRequestHandler<CreateModelCommand, Model>
+        public class CreateModelCommandHandler : IRequestHandler<CreateModelCommand, CreateModelListDto>
         {
             IModelRepository _modelRepository;
             IMapper _mapper;
@@ -33,13 +34,15 @@ namespace Application.Features.Models.Commands.CreateModel
                 _modelBusinessRules = modelBusinessRules;
             }
 
-            public async Task<Model> Handle(CreateModelCommand request, CancellationToken cancellationToken)
+            public async Task<CreateModelListDto> Handle(CreateModelCommand request, CancellationToken cancellationToken)
             {
                 await _modelBusinessRules.ModelNameCanNotBeDuplicatedWhenInserted(request.Name);
                 var mappedModel = _mapper.Map<Model>(request);
 
                 var createModel = await _modelRepository.AddAsync(mappedModel);
-                return createModel;
+                CreateModelListDto createModelListDto = _mapper.Map<CreateModelListDto>(createModel);
+
+                return createModelListDto;
             }
         }
     }

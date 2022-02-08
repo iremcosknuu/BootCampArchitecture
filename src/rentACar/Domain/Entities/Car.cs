@@ -12,10 +12,10 @@ namespace Domain.Entities
     {
         public Car()
         {
-
+            Rentals = new HashSet<Rental>();
         }
 
-        public Car(int id, int colorId, int modelId, string plate, short modelYear, CarState carState):this()
+        public Car(int id, int colorId, int modelId, string plate, short modelYear, CarState carState, int findexScore):this()
         {
             Id = id;
             ColorId = colorId;
@@ -23,6 +23,7 @@ namespace Domain.Entities
             Plate = plate;
             ModelYear = modelYear;
             CarState = carState;
+            FindexScore = findexScore;
         }
 
         public int ColorId { get; set; }
@@ -30,10 +31,11 @@ namespace Domain.Entities
         public string Plate { get; set; }
         public short ModelYear { get; set; }
         public CarState CarState { get; set; }
+        public int FindexScore { get; set; }
 
         public virtual Color Color{ get; set; }
         public virtual Model Model { get; set; }
 
-
+        public virtual ICollection<Rental> Rentals { get; set; }
     }
 }

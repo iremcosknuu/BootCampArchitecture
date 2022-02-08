@@ -12,8 +12,8 @@ using Persistence;
 namespace Persistence.Migrations
 {
     [DbContext(typeof(BaseDbContext))]
-    [Migration("20220207075135_Customer")]
-    partial class Customer
+    [Migration("20220208210049_addFindexScore")]
+    partial class addFindexScore
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -23,25 +23,6 @@ namespace Persistence.Migrations
                 .HasAnnotation("Relational:MaxIdentifierLength", 128);
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder, 1L, 1);
-
-            modelBuilder.Entity("Domain.Entities.Abstract.Customer", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasColumnName("Id");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
-
-                    b.Property<string>("Email")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)")
-                        .HasColumnName("Email");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("Customers", (string)null);
-                });
 
             modelBuilder.Entity("Domain.Entities.Brand", b =>
                 {
@@ -91,6 +72,10 @@ namespace Persistence.Migrations
                         .HasColumnType("int")
                         .HasColumnName("ColorId");
 
+                    b.Property<int>("FindexScore")
+                        .HasColumnType("int")
+                        .HasColumnName("FindexScore");
+
                     b.Property<int>("ModelId")
                         .HasColumnType("int")
                         .HasColumnName("ModelId");
@@ -118,6 +103,7 @@ namespace Persistence.Migrations
                             Id = 1,
                             CarState = 1,
                             ColorId = 1,
+                            FindexScore = 1750,
                             ModelId = 1,
                             ModelYear = (short)2018,
                             Plate = "06ABC06"
@@ -127,6 +113,7 @@ namespace Persistence.Migrations
                             Id = 2,
                             CarState = 1,
                             ColorId = 2,
+                            FindexScore = 1520,
                             ModelId = 2,
                             ModelYear = (short)2018,
                             Plate = "34ABC34"
@@ -164,6 +151,25 @@ namespace Persistence.Migrations
                         });
                 });
 
+            modelBuilder.Entity("Domain.Entities.Customer", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasColumnName("Id");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
+
+                    b.Property<string>("Email")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)")
+                        .HasColumnName("Email");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Customers", (string)null);
+                });
+
             modelBuilder.Entity("Domain.Entities.Fuel", b =>
                 {
                     b.Property<int>("Id")
@@ -193,6 +199,48 @@ namespace Persistence.Migrations
                             Id = 2,
                             Name = "Electric"
                         });
+                });
+
+            modelBuilder.Entity("Domain.Entities.Invoice", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasColumnName("id");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
+
+                    b.Property<int>("CustomerId")
+                        .HasColumnType("int")
+                        .HasColumnName("CustomerId");
+
+                    b.Property<int>("InvoiceNumber")
+                        .HasColumnType("int")
+                        .HasColumnName("InvoiceNumber");
+
+                    b.Property<DateTime>("InvoicedDate")
+                        .HasColumnType("datetime2")
+                        .HasColumnName("InvoicedDate");
+
+                    b.Property<int>("RentalId")
+                        .HasColumnType("int")
+                        .HasColumnName("RentalId");
+
+                    b.Property<double>("TotalPrice")
+                        .HasColumnType("float")
+                        .HasColumnName("TotalPrice");
+
+                    b.Property<int>("TotalRentalDate")
+                        .HasColumnType("int")
+                        .HasColumnName("TotalRentalDate");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("CustomerId");
+
+                    b.HasIndex("RentalId");
+
+                    b.ToTable("Invoices", (string)null);
                 });
 
             modelBuilder.Entity("Domain.Entities.Maintenance", b =>
@@ -309,6 +357,10 @@ namespace Persistence.Migrations
                         .HasColumnType("int")
                         .HasColumnName("CarId");
 
+                    b.Property<int>("CustomerId")
+                        .HasColumnType("int")
+                        .HasColumnName("CustomerId");
+
                     b.Property<DateTime>("RentDate")
                         .HasColumnType("datetime2")
                         .HasColumnName("RentDate");
@@ -328,6 +380,8 @@ namespace Persistence.Migrations
                     b.HasKey("Id");
 
                     b.HasIndex("CarId");
+
+                    b.HasIndex("CustomerId");
 
                     b.ToTable("Rentals", (string)null);
                 });
@@ -363,26 +417,36 @@ namespace Persistence.Migrations
                         });
                 });
 
-            modelBuilder.Entity("Domain.Entities.Abstract.CorporateCustomer", b =>
+            modelBuilder.Entity("Domain.Entities.CorporateCustomer", b =>
                 {
-                    b.HasBaseType("Domain.Entities.Abstract.Customer");
+                    b.HasBaseType("Domain.Entities.Customer");
 
                     b.Property<string>("CompanyName")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)")
                         .HasColumnName("CompanyName");
 
+                    b.Property<int>("CustomerId")
+                        .HasColumnType("int");
+
                     b.Property<string>("TaxId")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)")
                         .HasColumnName("TaxId");
 
+                    b.HasIndex("CustomerId")
+                        .IsUnique()
+                        .HasFilter("[CustomerId] IS NOT NULL");
+
                     b.ToTable("CorporateCustomers", (string)null);
                 });
 
-            modelBuilder.Entity("Domain.Entities.Abstract.IndividualCustomer", b =>
+            modelBuilder.Entity("Domain.Entities.IndividualCustomer", b =>
                 {
-                    b.HasBaseType("Domain.Entities.Abstract.Customer");
+                    b.HasBaseType("Domain.Entities.Customer");
+
+                    b.Property<int>("CustomerId")
+                        .HasColumnType("int");
 
                     b.Property<string>("FirstName")
                         .IsRequired()
@@ -398,6 +462,10 @@ namespace Persistence.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)")
                         .HasColumnName("NationalityId");
+
+                    b.HasIndex("CustomerId")
+                        .IsUnique()
+                        .HasFilter("[CustomerId] IS NOT NULL");
 
                     b.ToTable("IndividualCustomers", (string)null);
                 });
@@ -419,6 +487,25 @@ namespace Persistence.Migrations
                     b.Navigation("Color");
 
                     b.Navigation("Model");
+                });
+
+            modelBuilder.Entity("Domain.Entities.Invoice", b =>
+                {
+                    b.HasOne("Domain.Entities.Customer", "Customer")
+                        .WithMany()
+                        .HasForeignKey("CustomerId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Domain.Entities.Rental", "Rental")
+                        .WithMany()
+                        .HasForeignKey("RentalId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Customer");
+
+                    b.Navigation("Rental");
                 });
 
             modelBuilder.Entity("Domain.Entities.Maintenance", b =>
@@ -467,25 +554,49 @@ namespace Persistence.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
+                    b.HasOne("Domain.Entities.Customer", "Customer")
+                        .WithMany("Rentals")
+                        .HasForeignKey("CustomerId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
                     b.Navigation("Car");
+
+                    b.Navigation("Customer");
                 });
 
-            modelBuilder.Entity("Domain.Entities.Abstract.CorporateCustomer", b =>
+            modelBuilder.Entity("Domain.Entities.CorporateCustomer", b =>
                 {
-                    b.HasOne("Domain.Entities.Abstract.Customer", null)
+                    b.HasOne("Domain.Entities.Customer", "Customer")
+                        .WithOne("CorporateCustomer")
+                        .HasForeignKey("Domain.Entities.CorporateCustomer", "CustomerId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Domain.Entities.Customer", null)
                         .WithOne()
-                        .HasForeignKey("Domain.Entities.Abstract.CorporateCustomer", "Id")
+                        .HasForeignKey("Domain.Entities.CorporateCustomer", "Id")
                         .OnDelete(DeleteBehavior.ClientCascade)
                         .IsRequired();
+
+                    b.Navigation("Customer");
                 });
 
-            modelBuilder.Entity("Domain.Entities.Abstract.IndividualCustomer", b =>
+            modelBuilder.Entity("Domain.Entities.IndividualCustomer", b =>
                 {
-                    b.HasOne("Domain.Entities.Abstract.Customer", null)
+                    b.HasOne("Domain.Entities.Customer", "Customer")
+                        .WithOne("IndividualCustomer")
+                        .HasForeignKey("Domain.Entities.IndividualCustomer", "CustomerId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Domain.Entities.Customer", null)
                         .WithOne()
-                        .HasForeignKey("Domain.Entities.Abstract.IndividualCustomer", "Id")
+                        .HasForeignKey("Domain.Entities.IndividualCustomer", "Id")
                         .OnDelete(DeleteBehavior.ClientCascade)
                         .IsRequired();
+
+                    b.Navigation("Customer");
                 });
 
             modelBuilder.Entity("Domain.Entities.Brand", b =>
@@ -496,6 +607,17 @@ namespace Persistence.Migrations
             modelBuilder.Entity("Domain.Entities.Color", b =>
                 {
                     b.Navigation("Cars");
+                });
+
+            modelBuilder.Entity("Domain.Entities.Customer", b =>
+                {
+                    b.Navigation("CorporateCustomer")
+                        .IsRequired();
+
+                    b.Navigation("IndividualCustomer")
+                        .IsRequired();
+
+                    b.Navigation("Rentals");
                 });
 
             modelBuilder.Entity("Domain.Entities.Fuel", b =>

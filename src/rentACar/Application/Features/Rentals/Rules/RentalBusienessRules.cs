@@ -1,4 +1,7 @@
-﻿using Application.Services.Repositories;
+﻿using Application.Features.CorporateCustomers.Rules;
+using Application.Features.IndividualCustomers.Rules;
+using Application.Services.Repositories;
+using Core.Application.Adapters;
 using Core.CrossCuttingConcerns.Exceptions;
 using System;
 using System.Collections.Generic;
@@ -11,10 +14,16 @@ namespace Application.Features.Rentals.Rules
     public class RentalBusienessRules
     {
         IRentalRepository _rentalRepository;
+        IndividualCustomerBusienessRules _individualCustomerBusienessRules;
+        CorporateCustomerBusienessRules _corporateCustomerBusienessRules;
+        IFindexScoreAdapterService _findexScoreAdapterService;
 
-        public RentalBusienessRules(IRentalRepository rentalRepository)
+        public RentalBusienessRules(IRentalRepository rentalRepository, IFindexScoreAdapterService findexScoreAdapterService, CorporateCustomerBusienessRules corporateCustomerBusienessRules, IndividualCustomerBusienessRules individualCustomerBusienessRules)
         {
             _rentalRepository = rentalRepository;
+            _findexScoreAdapterService = findexScoreAdapterService;
+            _corporateCustomerBusienessRules = corporateCustomerBusienessRules;
+            _individualCustomerBusienessRules = individualCustomerBusienessRules;
         }
 
         public bool CheckIfCarIsRented(int carId)

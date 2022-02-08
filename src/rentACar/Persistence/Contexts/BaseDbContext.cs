@@ -23,10 +23,10 @@ namespace Persistence
         public DbSet<Transmission> Transmissions { get; set; }
         public DbSet<Rental> Rentals { get; set; }
         public DbSet<Maintenance> Maintenances { get; set; }
-
         public DbSet<Customer> Customer { get; set; }
         public DbSet<IndividualCustomer> IndividualCustomers { get; set; }
         public DbSet<CorporateCustomer> CorporateCustomers { get; set; }
+        public DbSet<Invoice> Invoices { get; set; }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
@@ -97,6 +97,8 @@ namespace Persistence
                 b.Property(p => p.ColorId).HasColumnName("ColorId");
                 b.Property(p => p.ModelId).HasColumnName("ModelId");
                 b.Property(p => p.CarState).HasColumnName("State");
+                b.Property(p => p.FindexScore).HasColumnName("FindexScore");
+                b.HasMany(p => p.Rentals);
                 b.HasOne(p => p.Color);
                 b.HasOne(p => p.Model);
             });
@@ -110,7 +112,9 @@ namespace Persistence
                 b.Property(p => p.RentKilometer).HasColumnName("RentKilometer");
                 b.Property(p => p.ReturnKilometer).HasColumnName("ReturnKilometer");
                 b.Property(p => p.CarId).HasColumnName("CarId");
+                b.Property(p => p.CustomerId).HasColumnName("CustomerId");
                 b.HasOne(p => p.Car);
+                b.HasOne(p => p.Customer);
             });
 
             modelBuilder.Entity<Maintenance>(b =>
@@ -130,23 +134,41 @@ namespace Persistence
                 b.ToTable("Customers").HasKey(k => k.Id);
                 b.Property(p => p.Id).HasColumnName("Id");
                 b.Property(p => p.Email).HasColumnName("Email");
+                b.HasOne(p => p.IndividualCustomer);
+                b.HasOne(p => p.CorporateCustomer);
+                b.HasMany(p => p.Rentals);
             });
 
             modelBuilder.Entity<CorporateCustomer>(b =>
             {
                 b.ToTable("CorporateCustomers");
+                b.Property(p => p.CustomerId).HasColumnName("CustomerId");
                 b.Property(p => p.CompanyName).HasColumnName("CompanyName");
                 b.Property(p => p.TaxId).HasColumnName("TaxId");
+                b.HasOne(p => p.Customer);
             });
 
             modelBuilder.Entity<IndividualCustomer>(b =>
             {
                 b.ToTable("IndividualCustomers");
+                b.Property(p => p.CustomerId).HasColumnName("CustomerId");
                 b.Property(p => p.FirstName).HasColumnName("CompanyName");
                 b.Property(p => p.LastName).HasColumnName("LastName");
                 b.Property(p => p.NationalityId).HasColumnName("NationalityId");
+                b.HasOne(p => p.Customer);
             });
 
+            modelBuilder.Entity<Invoice>(b =>
+            {
+                b.ToTable("Invoices");
+                b.Property(p => p.Id).HasColumnName("id");
+                b.Property(p => p.CustomerId).HasColumnName("CustomerId");
+                b.Property(p => p.RentalId).HasColumnName("RentalId");
+                b.Property(p => p.InvoiceNumber).HasColumnName("InvoiceNumber");
+                b.Property(p => p.InvoicedDate).HasColumnName("InvoicedDate");
+                b.Property(p => p.TotalRentalDate).HasColumnName("TotalRentalDate");
+                b.Property(p => p.TotalPrice).HasColumnName("TotalPrice");
+            });
 
             var brand1 = new Brand(1, "BMW");
             var brand2 = new Brand(2, "Mercedes");
@@ -168,8 +190,8 @@ namespace Persistence
             var model2 = new Model(2, "CLA 180D", 600, 2, 1, 2, "");
             modelBuilder.Entity<Model>().HasData(model1, model2);
 
-            var car1 = new Car(1, 1, 1,"06ABC06", 2018, CarState.Available);
-            var car2 = new Car(2, 2, 2, "34ABC34", 2018, CarState.Available);
+            var car1 = new Car(1, 1, 1,"06ABC06", 2018, CarState.Available,1750);
+            var car2 = new Car(2, 2, 2, "34ABC34", 2018, CarState.Available,1520);
             modelBuilder.Entity<Car>().HasData(car1, car2);
 
  

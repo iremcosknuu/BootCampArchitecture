@@ -1,4 +1,6 @@
 ﻿using Application.Services.Repositories;
+using Core.Application.Adapters;
+using Core.Application.ExternalServices;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -28,6 +30,8 @@ namespace Persistence
             services.AddScoped<IMaintenanceRepository, MaintenanceRepository>();
             services.AddScoped<IIndividualCustomerRepository, IndividualCustomerRepository>();
             services.AddScoped<ICorporateCustomerRepository, CorporateCustomerRepository>();
+            services.AddScoped<IInvoiceRepository, InvoiceRepository>();
+            services.AddScoped<IFindexScoreAdapterService, FindexScoreService>();
 
             return services;
         }

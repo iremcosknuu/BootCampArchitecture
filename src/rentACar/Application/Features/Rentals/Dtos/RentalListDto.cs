@@ -14,5 +14,6 @@ namespace Application.Features.Rentals.Dtos
         public double RentKilometer { get; set; }
         public double ReturnKilometer { get; set; }
         public int CarId { get; set; }
+        public int CustomerId { get; set; }
     }
 }

@@ -12,8 +12,8 @@ using Persistence;
 namespace Persistence.Migrations
 {
     [DbContext(typeof(BaseDbContext))]
-    [Migration("20220203210634_rental3")]
-    partial class rental3
+    [Migration("20220208173532_invoiceAdd")]
+    partial class invoiceAdd
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -145,6 +145,25 @@ namespace Persistence.Migrations
                         });
                 });
 
+            modelBuilder.Entity("Domain.Entities.Customer", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasColumnName("Id");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
+
+                    b.Property<string>("Email")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)")
+                        .HasColumnName("Email");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Customers", (string)null);
+                });
+
             modelBuilder.Entity("Domain.Entities.Fuel", b =>
                 {
                     b.Property<int>("Id")
@@ -174,6 +193,81 @@ namespace Persistence.Migrations
                             Id = 2,
                             Name = "Electric"
                         });
+                });
+
+            modelBuilder.Entity("Domain.Entities.Invoice", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasColumnName("id");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
+
+                    b.Property<int>("CustomerId")
+                        .HasColumnType("int")
+                        .HasColumnName("CustomerId");
+
+                    b.Property<int>("InvoiceNumber")
+                        .HasColumnType("int")
+                        .HasColumnName("InvoiceNumber");
+
+                    b.Property<DateTime>("InvoicedDate")
+                        .HasColumnType("datetime2")
+                        .HasColumnName("InvoicedDate");
+
+                    b.Property<int>("RentalId")
+                        .HasColumnType("int")
+                        .HasColumnName("RentalId");
+
+                    b.Property<double>("TotalPrice")
+                        .HasColumnType("float")
+                        .HasColumnName("TotalPrice");
+
+                    b.Property<int>("TotalRentalDate")
+                        .HasColumnType("int")
+                        .HasColumnName("TotalRentalDate");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("CustomerId");
+
+                    b.HasIndex("RentalId");
+
+                    b.ToTable("Invoices", (string)null);
+                });
+
+            modelBuilder.Entity("Domain.Entities.Maintenance", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasColumnName("Id");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
+
+                    b.Property<int>("CarId")
+                        .HasColumnType("int")
+                        .HasColumnName("CarId");
+
+                    b.Property<string>("Description")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)")
+                        .HasColumnName("Description");
+
+                    b.Property<DateTime>("MaintenanceDate")
+                        .HasColumnType("datetime2")
+                        .HasColumnName("MaintenanceDate");
+
+                    b.Property<DateTime>("ReturnDate")
+                        .HasColumnType("datetime2")
+                        .HasColumnName("ReturnDate");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("CarId");
+
+                    b.ToTable("Maintenances", (string)null);
                 });
 
             modelBuilder.Entity("Domain.Entities.Model", b =>
@@ -257,6 +351,10 @@ namespace Persistence.Migrations
                         .HasColumnType("int")
                         .HasColumnName("CarId");
 
+                    b.Property<int>("CustomerId")
+                        .HasColumnType("int")
+                        .HasColumnName("CustomerId");
+
                     b.Property<DateTime>("RentDate")
                         .HasColumnType("datetime2")
                         .HasColumnName("RentDate");
@@ -265,7 +363,7 @@ namespace Persistence.Migrations
                         .HasColumnType("float")
                         .HasColumnName("RentKilometer");
 
-                    b.Property<DateTime>("ReturnDate")
+                    b.Property<DateTime?>("ReturnDate")
                         .HasColumnType("datetime2")
                         .HasColumnName("ReturnDate");
 
@@ -276,6 +374,8 @@ namespace Persistence.Migrations
                     b.HasKey("Id");
 
                     b.HasIndex("CarId");
+
+                    b.HasIndex("CustomerId");
 
                     b.ToTable("Rentals", (string)null);
                 });
@@ -311,6 +411,55 @@ namespace Persistence.Migrations
                         });
                 });
 
+            modelBuilder.Entity("Domain.Entities.CorporateCustomer", b =>
+                {
+                    b.HasBaseType("Domain.Entities.Customer");
+
+                    b.Property<string>("CompanyName")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)")
+                        .HasColumnName("CompanyName");
+
+                    b.Property<int>("CustomerId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("TaxId")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)")
+                        .HasColumnName("TaxId");
+
+                    b.HasIndex("CustomerId");
+
+                    b.ToTable("CorporateCustomers", (string)null);
+                });
+
+            modelBuilder.Entity("Domain.Entities.IndividualCustomer", b =>
+                {
+                    b.HasBaseType("Domain.Entities.Customer");
+
+                    b.Property<int>("CustomerId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("FirstName")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)")
+                        .HasColumnName("CompanyName");
+
+                    b.Property<string>("LastName")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)")
+                        .HasColumnName("LastName");
+
+                    b.Property<string>("NationalityId")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)")
+                        .HasColumnName("NationalityId");
+
+                    b.HasIndex("CustomerId");
+
+                    b.ToTable("IndividualCustomers", (string)null);
+                });
+
             modelBuilder.Entity("Domain.Entities.Car", b =>
                 {
                     b.HasOne("Domain.Entities.Color", "Color")
@@ -328,6 +477,36 @@ namespace Persistence.Migrations
                     b.Navigation("Color");
 
                     b.Navigation("Model");
+                });
+
+            modelBuilder.Entity("Domain.Entities.Invoice", b =>
+                {
+                    b.HasOne("Domain.Entities.Customer", "Customer")
+                        .WithMany()
+                        .HasForeignKey("CustomerId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Domain.Entities.Rental", "Rental")
+                        .WithMany()
+                        .HasForeignKey("RentalId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Customer");
+
+                    b.Navigation("Rental");
+                });
+
+            modelBuilder.Entity("Domain.Entities.Maintenance", b =>
+                {
+                    b.HasOne("Domain.Entities.Car", "Car")
+                        .WithMany()
+                        .HasForeignKey("CarId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Car");
                 });
 
             modelBuilder.Entity("Domain.Entities.Model", b =>
@@ -365,7 +544,49 @@ namespace Persistence.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
+                    b.HasOne("Domain.Entities.Customer", "Customer")
+                        .WithMany("Rentals")
+                        .HasForeignKey("CustomerId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
                     b.Navigation("Car");
+
+                    b.Navigation("Customer");
+                });
+
+            modelBuilder.Entity("Domain.Entities.CorporateCustomer", b =>
+                {
+                    b.HasOne("Domain.Entities.Customer", "Customer")
+                        .WithMany()
+                        .HasForeignKey("CustomerId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Domain.Entities.Customer", null)
+                        .WithOne()
+                        .HasForeignKey("Domain.Entities.CorporateCustomer", "Id")
+                        .OnDelete(DeleteBehavior.ClientCascade)
+                        .IsRequired();
+
+                    b.Navigation("Customer");
+                });
+
+            modelBuilder.Entity("Domain.Entities.IndividualCustomer", b =>
+                {
+                    b.HasOne("Domain.Entities.Customer", "Customer")
+                        .WithMany()
+                        .HasForeignKey("CustomerId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Domain.Entities.Customer", null)
+                        .WithOne()
+                        .HasForeignKey("Domain.Entities.IndividualCustomer", "Id")
+                        .OnDelete(DeleteBehavior.ClientCascade)
+                        .IsRequired();
+
+                    b.Navigation("Customer");
                 });
 
             modelBuilder.Entity("Domain.Entities.Brand", b =>
@@ -376,6 +597,11 @@ namespace Persistence.Migrations
             modelBuilder.Entity("Domain.Entities.Color", b =>
                 {
                     b.Navigation("Cars");
+                });
+
+            modelBuilder.Entity("Domain.Entities.Customer", b =>
+                {
+                    b.Navigation("Rentals");
                 });
 
             modelBuilder.Entity("Domain.Entities.Fuel", b =>

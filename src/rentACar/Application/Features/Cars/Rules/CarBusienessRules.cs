@@ -45,5 +45,14 @@ namespace Application.Features.Cars.Rules
             }
         }
 
+        //public async Task<int> CheckIfFindexScore(int id)
+        //{
+        //    var result = _carRespository.GetAsync(c => c.Id == id);
+        //    if(result == null)
+        //    {
+        //        throw new BusinessException("Car is not exists");
+        //    }
+            
+        //}
     }
 }

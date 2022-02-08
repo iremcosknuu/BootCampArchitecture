@@ -1,4 +1,5 @@
-﻿using Application.Features.IndividualCustomers.Rules;
+﻿using Application.Features.IndividualCustomers.Dtos;
+using Application.Features.IndividualCustomers.Rules;
 using Application.Services.Repositories;
 using AutoMapper;
 using Core.CrossCuttingConcerns.Exceptions;
@@ -12,7 +13,7 @@ using System.Threading.Tasks;
 
 namespace Application.Features.IndividualCustomers.Commands.UpdateIndividualCustomer
 {
-    public class UpdateIndividualCustomerCommand:IRequest<IndividualCustomer>
+    public class UpdateIndividualCustomerCommand:IRequest<UpdateIndividualCustomerListDto>
     {
         public int Id { get; set; }
         public string Email { get; set; }
@@ -20,7 +21,7 @@ namespace Application.Features.IndividualCustomers.Commands.UpdateIndividualCust
         public string LastName { get; set; }
         public string NationalityId { get; set; }
 
-        public class UpdateIndividualCustomerCommandHandler : IRequestHandler<UpdateIndividualCustomerCommand, IndividualCustomer>
+        public class UpdateIndividualCustomerCommandHandler : IRequestHandler<UpdateIndividualCustomerCommand, UpdateIndividualCustomerListDto>
         {
             IIndividualCustomerRepository _individualCustomerRepository;
             IMapper _mapper;
@@ -33,7 +34,7 @@ namespace Application.Features.IndividualCustomers.Commands.UpdateIndividualCust
                 _individualCustomerBusienessRules = individualCustomerBusienessRules;
             }
 
-            public async Task<IndividualCustomer> Handle(UpdateIndividualCustomerCommand request, CancellationToken cancellationToken)
+            public async Task<UpdateIndividualCustomerListDto> Handle(UpdateIndividualCustomerCommand request, CancellationToken cancellationToken)
             {
                 var individualCustomerToUpdate = await _individualCustomerRepository.GetAsync(c => c.Id == request.Id);
 
@@ -44,7 +45,7 @@ namespace Application.Features.IndividualCustomers.Commands.UpdateIndividualCust
 
                 await _individualCustomerRepository.UpdateAsync(individualCustomerToUpdate);
 
-                var mappedIndividualCustomer = _mapper.Map<IndividualCustomer>(individualCustomerToUpdate);
+                var mappedIndividualCustomer = _mapper.Map<UpdateIndividualCustomerListDto>(individualCustomerToUpdate);
                 return mappedIndividualCustomer;
 
             }

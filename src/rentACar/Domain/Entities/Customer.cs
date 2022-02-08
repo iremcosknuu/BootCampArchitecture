@@ -9,17 +9,20 @@ namespace Domain.Entities
 {
     public class Customer : Entity
     {
-        public string Email { get; set; }
-
         public Customer()
         {
-
+            Rentals = new List<Rental>();
         }
 
-        public Customer(int id,string email)
+        public Customer(int id,string email):this()
         {
             Id = id;
             Email = email;
         }
+
+        public string Email { get; set; }
+        public virtual ICollection<Rental> Rentals { get; set; }
+        public virtual CorporateCustomer CorporateCustomer { get; set; }
+        public virtual IndividualCustomer IndividualCustomer { get; set; }
     }
 }

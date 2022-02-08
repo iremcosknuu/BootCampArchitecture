@@ -18,8 +18,23 @@ namespace Application.Features.Models.Models
         public MappingProfiles()
         {
             CreateMap<Model, CreateModelCommand>().ReverseMap();
+            CreateMap<Model, CreateModelListDto>()
+                .ForMember(m => m.BrandName, opt => opt.MapFrom(m => m.Brand.Name))
+                .ForMember(m => m.FuelName, opt => opt.MapFrom(m => m.Fuel.Name))
+                .ForMember(m => m.TransmissionName, opt => opt.MapFrom(m => m.Transmission.Name));
+
             CreateMap<Model, UpdateModelCommand>().ReverseMap();
+            CreateMap<Model, UpdateModelListDto>()
+                .ForMember(m => m.BrandName, opt => opt.MapFrom(m => m.Brand.Name))
+                .ForMember(m => m.FuelName, opt => opt.MapFrom(m => m.Fuel.Name))
+                .ForMember(m => m.TransmissionName, opt => opt.MapFrom(m => m.Transmission.Name));
+
             CreateMap<Model, DeleteModelCommand>().ReverseMap();
+            CreateMap<Model, DeleteModelListDto>()
+                .ForMember(m => m.BrandName, opt => opt.MapFrom(m => m.Brand.Name))
+                .ForMember(m => m.FuelName, opt => opt.MapFrom(m => m.Fuel.Name))
+                .ForMember(m => m.TransmissionName, opt => opt.MapFrom(m => m.Transmission.Name));
+
             CreateMap<Model,ModelListDto>()
                 .ForMember(m => m.BrandName,opt => opt.MapFrom(m => m.Brand.Name))
                 .ForMember(m=> m.FuelName, opt => opt.MapFrom(m => m.Fuel.Name))

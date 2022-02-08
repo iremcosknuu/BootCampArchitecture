@@ -1,4 +1,5 @@
-﻿using Application.Services.Repositories;
+﻿using Application.Features.Maintenances.Dtos;
+using Application.Services.Repositories;
 using AutoMapper;
 using Domain.Entities;
 using MediatR;
@@ -10,12 +11,12 @@ using System.Threading.Tasks;
 
 namespace Application.Features.Maintenances.Commands.DeleteMaintenance
 {
-    public class DeleteMaintenanceCommand:IRequest<Maintenance>
+    public class DeleteMaintenanceCommand:IRequest<DeleteMaintenanceListDto>
     {
         public int Id { get; set; }
 
 
-        public class DeleteMaintenanceCommandHandler : IRequestHandler<DeleteMaintenanceCommand, Maintenance>
+        public class DeleteMaintenanceCommandHandler : IRequestHandler<DeleteMaintenanceCommand, DeleteMaintenanceListDto>
         {
             IMaintenanceRepository _maintenanceRepository;
             IMapper _mapper;
@@ -26,11 +27,13 @@ namespace Application.Features.Maintenances.Commands.DeleteMaintenance
                 _mapper = mapper;
             }
 
-            public async Task<Maintenance> Handle(DeleteMaintenanceCommand request, CancellationToken cancellationToken)
+            public async Task<DeleteMaintenanceListDto> Handle(DeleteMaintenanceCommand request, CancellationToken cancellationToken)
             {
                 var mappedMaintenance = _mapper.Map<Maintenance>(request);
                 var deletedMaintenance = await _maintenanceRepository.DeleteAsync(mappedMaintenance);
-                return deletedMaintenance;
+
+                DeleteMaintenanceListDto deleteMaintenanceListDto = _mapper.Map<DeleteMaintenanceListDto>(deletedMaintenance);
+                return deleteMaintenanceListDto;
             }
         }
     }

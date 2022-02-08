@@ -25,5 +25,15 @@ namespace Application.Features.IndividualCustomers.Rules
                 throw new BusinessException("NationalId cannot be dublicated");
             }
         }
+
+        public async Task<string> CheckIfIndividualCustomerIsExists(int id)
+        {
+            var individualCustomer = await _individualCustomerRepository.GetAsync(c => c.Id == id);
+            if (individualCustomer == null)
+            {
+                throw new BusinessException("Individual Customer is not exist");
+            }
+            return individualCustomer.NationalityId;
+        }
     }
 }

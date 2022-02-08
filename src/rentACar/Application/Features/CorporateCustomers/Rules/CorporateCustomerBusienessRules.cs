@@ -25,5 +25,15 @@ namespace Application.Features.CorporateCustomers.Rules
                 throw new BusinessException("TaxNumber cannot be dublicated");
             }
         }
+
+        public async Task<string> CheckIfCorporateCustomerIsExist(int id)
+        {
+            var corporateCustomer = await _corporateCustomerRepository.GetAsync(c => c.Id == id);
+            if (corporateCustomer == null)
+            {
+                throw new BusinessException("Corporate Customer is not exist");
+            }
+            return corporateCustomer.TaxId;
+        }
     }
 }

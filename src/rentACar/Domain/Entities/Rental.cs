@@ -14,7 +14,7 @@ namespace Domain.Entities
 
         }
 
-        public Rental(int id,DateTime rentDate, DateTime returnDate, double rentKilometer, double returnKilometer, int carId):this()
+        public Rental(int id,DateTime rentDate, DateTime returnDate, double rentKilometer, double returnKilometer, int carId ,int customerId):this()
         {
             Id = id;
             RentDate = rentDate;
@@ -22,6 +22,7 @@ namespace Domain.Entities
             RentKilometer = rentKilometer;
             ReturnKilometer = returnKilometer;
             CarId = carId;
+            CustomerId = customerId;
         }
 
         public DateTime RentDate { get; set; }
@@ -29,8 +30,10 @@ namespace Domain.Entities
         public double RentKilometer { get; set; }
         public double ReturnKilometer { get; set; }
         public int CarId { get; set; }
+        public int CustomerId { get; set; }
 
         public virtual Car Car { get; set; }
+        public virtual Customer Customer { get; set; }
 
     }
 }

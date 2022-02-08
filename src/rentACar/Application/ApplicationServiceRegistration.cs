@@ -4,6 +4,7 @@ using Application.Features.Colors.Rules;
 using Application.Features.CorporateCustomers.Rules;
 using Application.Features.Fuels.Rules;
 using Application.Features.IndividualCustomers.Rules;
+using Application.Features.Invoices.Rules;
 using Application.Features.Maintenances.Rules;
 using Application.Features.Rentals.Rules;
 using Application.Features.Transmissions.Rules;
@@ -38,6 +39,7 @@ namespace Application
             services.AddScoped<MaintenanceBusienessRules>();
             services.AddScoped<IndividualCustomerBusienessRules>();
             services.AddScoped<CorporateCustomerBusienessRules>();
+            services.AddScoped<InvoiceBusienessRules>();
 
             services.AddTransient(typeof(IPipelineBehavior<,>), typeof(RequestValidationBehavior<,>));
 

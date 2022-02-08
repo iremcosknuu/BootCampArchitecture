@@ -1,4 +1,5 @@
-﻿using Application.Features.CorporateCustomers.Rules;
+﻿using Application.Features.CorporateCustomers.Dtos;
+using Application.Features.CorporateCustomers.Rules;
 using Application.Services.Repositories;
 using AutoMapper;
 using Domain.Entities;
@@ -11,13 +12,13 @@ using System.Threading.Tasks;
 
 namespace Application.Features.CorporateCustomers.Commands.CreateCorporateCustomer
 {
-    public class CreateCorporateCustomerCommand:IRequest<CorporateCustomer>
+    public class CreateCorporateCustomerCommand:IRequest<CreateCorporateCustomerListDto>
     {
         public string Email { get; set; }
         public string CompanyName { get; set; }
         public string TaxId { get; set; }
 
-        public class CorporateCustomerCommandHandler : IRequestHandler<CreateCorporateCustomerCommand, CorporateCustomer>
+        public class CorporateCustomerCommandHandler : IRequestHandler<CreateCorporateCustomerCommand, CreateCorporateCustomerListDto>
         {
             ICorporateCustomerRepository _corporateCustomerRepository;
             IMapper _mapper;
@@ -30,13 +31,15 @@ namespace Application.Features.CorporateCustomers.Commands.CreateCorporateCustom
                 _corporateCustomerBusienessRules = corporateCustomerBusienessRules;
             }
 
-            public async Task<CorporateCustomer> Handle(CreateCorporateCustomerCommand request, CancellationToken cancellationToken)
+            public async Task<CreateCorporateCustomerListDto> Handle(CreateCorporateCustomerCommand request, CancellationToken cancellationToken)
             {
                 await _corporateCustomerBusienessRules.TaxNumberCanBotBeDublicated(request.TaxId);
 
                 var mappedCorporateCustomer = _mapper.Map<CorporateCustomer>(request);
                 var createCorporateCustomer = await _corporateCustomerRepository.AddAsync(mappedCorporateCustomer);
-                return createCorporateCustomer;
+
+                CreateCorporateCustomerListDto createCorporateCustomerListDto = _mapper.Map<CreateCorporateCustomerListDto>(createCorporateCustomer);
+                return createCorporateCustomerListDto;
             }
         }
     }

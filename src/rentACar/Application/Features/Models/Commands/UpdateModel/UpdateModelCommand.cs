@@ -1,4 +1,5 @@
 ﻿using Application.Features.Brands.Rules;
+using Application.Features.Models.Dtos;
 using Application.Services.Repositories;
 using AutoMapper;
 using Domain.Entities;
@@ -11,7 +12,7 @@ using System.Threading.Tasks;
 
 namespace Application.Features.Models.Commands.UpdateModel
 {
-    public class UpdateModelCommand:IRequest<Model>
+    public class UpdateModelCommand:IRequest<UpdateModelListDto>
     {
         public int id { get; set; }
         public string Name { get; set; }
@@ -21,7 +22,7 @@ namespace Application.Features.Models.Commands.UpdateModel
         public int FuelId { get; set; }
         public int TransmissionId { get; set; }
 
-        public class UpdateModelCommandHandler : IRequestHandler<UpdateModelCommand,Model>
+        public class UpdateModelCommandHandler : IRequestHandler<UpdateModelCommand, UpdateModelListDto>
         {
             IModelRepository _modelRepository;
             IMapper _mapper;
@@ -34,13 +35,15 @@ namespace Application.Features.Models.Commands.UpdateModel
                 _modelBusienesRules = modelBusienesRules;
             }
 
-            public async Task<Model> Handle(UpdateModelCommand request, CancellationToken cancellationToken)
+            public async Task<UpdateModelListDto> Handle(UpdateModelCommand request, CancellationToken cancellationToken)
             {
                 await _modelBusienesRules.ModelNameCanNotBeDuplicatedWhenInserted(request.Name);
                 var mappedModel = _mapper.Map<Model>(request);
 
                 var createdModel = await _modelRepository.UpdateAsync(mappedModel);
-                return createdModel;
+                UpdateModelListDto updateModelListDto = _mapper.Map<UpdateModelListDto>(createdModel);
+
+                return updateModelListDto;
             }
         }
     }

@@ -4,7 +4,7 @@
 
 namespace Persistence.Migrations
 {
-    public partial class rental2 : Migration
+    public partial class addCustomerId : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {

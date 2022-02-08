@@ -1,4 +1,5 @@
-﻿using Application.Services.Repositories;
+﻿using Application.Features.Models.Dtos;
+using Application.Services.Repositories;
 using AutoMapper;
 using Domain.Entities;
 using MediatR;
@@ -10,11 +11,11 @@ using System.Threading.Tasks;
 
 namespace Application.Features.Models.Commands.DeleteModel
 {
-    public class DeleteModelCommand:IRequest<Model>
+    public class DeleteModelCommand:IRequest<DeleteModelListDto>
     {
         public int Id { get; set; }
 
-        public class DeleteModelCommandHandler : IRequestHandler<DeleteModelCommand,Model>
+        public class DeleteModelCommandHandler : IRequestHandler<DeleteModelCommand, DeleteModelListDto>
         {
             IModelRepository _modelRepository;
             IMapper _mapper;
@@ -25,12 +26,14 @@ namespace Application.Features.Models.Commands.DeleteModel
                 _mapper = mapper;
             }
 
-            public async Task<Model> Handle(DeleteModelCommand request, CancellationToken cancellationToken)
+            public async Task<DeleteModelListDto> Handle(DeleteModelCommand request, CancellationToken cancellationToken)
             {
                 var mappedModel = _mapper.Map<Model>(request);
 
                 var deletedModel =  await _modelRepository.DeleteAsync(mappedModel);
-                return deletedModel;
+                DeleteModelListDto deleteModelListDto = _mapper.Map< DeleteModelListDto >(deletedModel);
+
+                return deleteModelListDto;
             }
         }
     }

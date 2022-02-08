@@ -21,6 +21,7 @@ namespace Application.Features.Rentals.Commands.CreateRental
         public double RentKilometer { get; set; }
         public double ReturnKilometer { get; set; }
         public int CarId { get; set; }
+        public int CustomerId { get; set; }
 
         public class CreateRentalCommandHandler : IRequestHandler<CreateRentalCommand, Rental>
         {

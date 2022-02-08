@@ -19,8 +19,16 @@ namespace Application.Features.Maintenances.Profiles
         public MappingProfiles()
         {
             CreateMap<Maintenance, CreateMaintenanceCommand>().ReverseMap();
+            CreateMap<Maintenance, CreateMaintenanceListDto>().ReverseMap();
+
             CreateMap<Maintenance, UpdateMaintenanceCommand>().ReverseMap();
+            CreateMap<Maintenance, UpdateMaintenanceListDto>()
+                    .ForMember(m => m.CarId, opt => opt.MapFrom(m => m.Car.Id));
+
             CreateMap<Maintenance, DeleteMaintenanceCommand>().ReverseMap();
+            CreateMap<Maintenance, DeleteMaintenanceListDto>()
+                    .ForMember(m => m.CarId, opt => opt.MapFrom(m => m.Car.Id));
+
             CreateMap<Maintenance, MaintenanceListDto>()
                     .ForMember(m => m.CarId, opt => opt.MapFrom(m => m.Car.Id));
             CreateMap<IPaginate<Maintenance>, MaintenanceListModel>().ReverseMap();

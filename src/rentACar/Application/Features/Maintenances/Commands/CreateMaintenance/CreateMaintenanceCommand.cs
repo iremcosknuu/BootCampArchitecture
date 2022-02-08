@@ -1,4 +1,5 @@
 ﻿using Application.Features.Cars.Rules;
+using Application.Features.Maintenances.Dtos;
 using Application.Features.Maintenances.Rules;
 using Application.Features.Rentals.Rules;
 using Application.Services.Repositories;
@@ -14,7 +15,7 @@ using System.Threading.Tasks;
 
 namespace Application.Features.Maintenances.Commands.CreateMaintenance
 {
-    public class CreateMaintenanceCommand:IRequest<Maintenance>
+    public class CreateMaintenanceCommand:IRequest<CreateMaintenanceListDto>
     {
         public string Description { get; set; }
         public DateTime MaintenanceDate { get; set; }
@@ -22,7 +23,7 @@ namespace Application.Features.Maintenances.Commands.CreateMaintenance
         public int CarId { get; set; }
 
 
-        public class CreateMaintenanceCommandHandler : IRequestHandler<CreateMaintenanceCommand, Maintenance>
+        public class CreateMaintenanceCommandHandler : IRequestHandler<CreateMaintenanceCommand, CreateMaintenanceListDto>
         {
             IMaintenanceRepository _maintenanceRepository;
             IMapper _mapper;
@@ -39,18 +40,18 @@ namespace Application.Features.Maintenances.Commands.CreateMaintenance
                 _carBusienessRules = carBusienessRules;
             }
 
-            public async Task<Maintenance> Handle(CreateMaintenanceCommand request, CancellationToken cancellationToken)
+            public async Task<CreateMaintenanceListDto> Handle(CreateMaintenanceCommand request, CancellationToken cancellationToken)
             {
                 _maintenanceBusienessRules.CheckIfCarIsMaintenance(request.CarId);
                 _rentalBusienessRules.CheckIfCarIsRented(request.CarId);
 
                 var mappedMaintenance = _mapper.Map<Maintenance>(request);
                 var createdMaintenance =  await _maintenanceRepository.AddAsync(mappedMaintenance);
-
-                Console.WriteLine(CarState.Maintenance.ToString());
                 await _carBusienessRules.ChangeCarState(request.CarId,CarState.Maintenance);
 
-                return createdMaintenance;
+                CreateMaintenanceListDto createMaintenanceListDto = _mapper.Map<CreateMaintenanceListDto>(createdMaintenance);
+
+                return createMaintenanceListDto;
             }
         }
 
