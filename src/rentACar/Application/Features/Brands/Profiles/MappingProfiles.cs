@@ -19,11 +19,12 @@ namespace Application.Features.Brands.Profiles
         public MappingProfiles()
         {
             CreateMap<Brand, CreateBrandCommand>().ReverseMap();
+            CreateMap<Brand, CreateBrandListDto>().ReverseMap();
+
             CreateMap<Brand, UpdateBrandCommand>().ReverseMap();
             CreateMap<Brand, DeleteBrandCommand>().ReverseMap();
             CreateMap<Brand, BrandListDto>().ReverseMap();
             CreateMap<IPaginate<Brand>, BrandListModel>().ReverseMap();
-
         }
     }
 }

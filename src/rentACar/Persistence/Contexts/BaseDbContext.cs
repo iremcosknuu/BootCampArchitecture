@@ -1,4 +1,5 @@
 ﻿using Domain.Entities;
+using Domain.Entities;
 using Domain.Enums;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
@@ -22,6 +23,10 @@ namespace Persistence
         public DbSet<Transmission> Transmissions { get; set; }
         public DbSet<Rental> Rentals { get; set; }
         public DbSet<Maintenance> Maintenances { get; set; }
+
+        public DbSet<Customer> Customer { get; set; }
+        public DbSet<IndividualCustomer> IndividualCustomers { get; set; }
+        public DbSet<CorporateCustomer> CorporateCustomers { get; set; }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
@@ -119,6 +124,29 @@ namespace Persistence
                 b.HasOne(p => p.Car);
 
             });
+
+            modelBuilder.Entity<Customer>(b =>
+            {
+                b.ToTable("Customers").HasKey(k => k.Id);
+                b.Property(p => p.Id).HasColumnName("Id");
+                b.Property(p => p.Email).HasColumnName("Email");
+            });
+
+            modelBuilder.Entity<CorporateCustomer>(b =>
+            {
+                b.ToTable("CorporateCustomers");
+                b.Property(p => p.CompanyName).HasColumnName("CompanyName");
+                b.Property(p => p.TaxId).HasColumnName("TaxId");
+            });
+
+            modelBuilder.Entity<IndividualCustomer>(b =>
+            {
+                b.ToTable("IndividualCustomers");
+                b.Property(p => p.FirstName).HasColumnName("CompanyName");
+                b.Property(p => p.LastName).HasColumnName("LastName");
+                b.Property(p => p.NationalityId).HasColumnName("NationalityId");
+            });
+
 
             var brand1 = new Brand(1, "BMW");
             var brand2 = new Brand(2, "Mercedes");

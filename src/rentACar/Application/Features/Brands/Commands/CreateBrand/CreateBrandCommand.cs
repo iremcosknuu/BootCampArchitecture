@@ -1,4 +1,5 @@
 ﻿
+using Application.Features.Brands.Dtos;
 using Application.Features.Brands.Rules;
 using Application.Services.Repositories;
 using AutoMapper;
@@ -13,11 +14,11 @@ using System.Threading.Tasks;
 
 namespace Application.Features.Brands.Commands.CreateBrand
 {
-    public class CreateBrandCommand : IRequest<Brand>
+    public class CreateBrandCommand : IRequest<CreateBrandListDto>
     {
         public string Name { get; set; }
 
-        public class CreateBrandCommandHandler : IRequestHandler<CreateBrandCommand, Brand>
+        public class CreateBrandCommandHandler : IRequestHandler<CreateBrandCommand, CreateBrandListDto>
         {
             IBrandRepository _brandRepository;
             IMapper _mapper;
@@ -32,13 +33,15 @@ namespace Application.Features.Brands.Commands.CreateBrand
                 _mailService = mailService;
             }
 
-            public async Task<Brand> Handle(CreateBrandCommand request, CancellationToken cancellationToken)
+            public async Task<CreateBrandListDto> Handle(CreateBrandCommand request, CancellationToken cancellationToken)
             {
                 await _brandBusinessRules.BrandNameCanNotBeDuplicatedWhenInserted(request.Name);
 
                 var mappedBrand = _mapper.Map<Brand>(request);
 
                 var createdBrand = await _brandRepository.AddAsync(mappedBrand);
+
+                CreateBrandListDto createBrandListDto = _mapper.Map<CreateBrandListDto>(createdBrand);
 
                 var mail = new Mail
                 {
@@ -49,11 +52,8 @@ namespace Application.Features.Brands.Commands.CreateBrand
                 };
 
                 _mailService.SendMail(mail);
-                return createdBrand;
+                return createBrandListDto;
             }
         }
-
-        
-
     }
 }
