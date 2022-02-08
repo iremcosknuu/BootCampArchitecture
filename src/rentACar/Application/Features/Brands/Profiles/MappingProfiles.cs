@@ -22,7 +22,11 @@ namespace Application.Features.Brands.Profiles
             CreateMap<Brand, CreateBrandListDto>().ReverseMap();
 
             CreateMap<Brand, UpdateBrandCommand>().ReverseMap();
+            CreateMap<Brand, UpdateBrandListDto>().ReverseMap();
+
             CreateMap<Brand, DeleteBrandCommand>().ReverseMap();
+            CreateMap<Brand, DeleteBrandListDto>().ReverseMap();
+
             CreateMap<Brand, BrandListDto>().ReverseMap();
             CreateMap<IPaginate<Brand>, BrandListModel>().ReverseMap();
         }

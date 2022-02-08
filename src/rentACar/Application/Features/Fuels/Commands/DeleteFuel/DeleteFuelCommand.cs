@@ -1,4 +1,5 @@
-﻿using Application.Services.Repositories;
+﻿using Application.Features.Fuels.Dtos;
+using Application.Services.Repositories;
 using AutoMapper;
 using Domain.Entities;
 using MediatR;
@@ -10,11 +11,11 @@ using System.Threading.Tasks;
 
 namespace Application.Features.Fuels.Commands.DeleteFuel
 {
-    public class DeleteFuelCommand:IRequest<Fuel>
+    public class DeleteFuelCommand:IRequest<DeleteFuelListDto>
     {
         public int Id { get; set; }
 
-        public class DeleteFuelCommmandHandler : IRequestHandler<DeleteFuelCommand, Fuel>
+        public class DeleteFuelCommmandHandler : IRequestHandler<DeleteFuelCommand, DeleteFuelListDto>
         {
             IFuelRepository _fuelRepository;
             IMapper _mapper;
@@ -25,11 +26,13 @@ namespace Application.Features.Fuels.Commands.DeleteFuel
                 _mapper = mapper;
             }
 
-            public async Task<Fuel> Handle(DeleteFuelCommand request, CancellationToken cancellationToken)
+            public async Task<DeleteFuelListDto> Handle(DeleteFuelCommand request, CancellationToken cancellationToken)
             {
                 var mappedFuel = _mapper.Map<Fuel>(request);
                 var deletedFuel = await _fuelRepository.DeleteAsync(mappedFuel);
-                return deletedFuel;
+                DeleteFuelListDto deleteFuelListDto = _mapper.Map<DeleteFuelListDto>(deletedFuel);
+
+                return deleteFuelListDto;
             }
         }
     }

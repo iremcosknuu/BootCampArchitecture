@@ -1,4 +1,5 @@
-﻿using Application.Features.Fuels.Rules;
+﻿using Application.Features.Fuels.Dtos;
+using Application.Features.Fuels.Rules;
 using Application.Services.Repositories;
 using AutoMapper;
 using Domain.Entities;
@@ -11,11 +12,11 @@ using System.Threading.Tasks;
 
 namespace Application.Features.Fuels.Commands.CreateFuel
 {
-    public class CreateFuelCommand : IRequest<Fuel>
+    public class CreateFuelCommand : IRequest<CreateFuelListDto>
     {
         public string Name { get; set; }
 
-        public class CreateFuelCommmandHandler : IRequestHandler<CreateFuelCommand, Fuel>
+        public class CreateFuelCommmandHandler : IRequestHandler<CreateFuelCommand, CreateFuelListDto>
         {
             IFuelRepository _fuelRepository;
             IMapper _mapper;
@@ -28,13 +29,15 @@ namespace Application.Features.Fuels.Commands.CreateFuel
                 _fuelBusienessRules = fuelBusienessRules;
             }
 
-            public async Task<Fuel> Handle(CreateFuelCommand request, CancellationToken cancellationToken)
+            public async Task<CreateFuelListDto> Handle(CreateFuelCommand request, CancellationToken cancellationToken)
             {
                 await _fuelBusienessRules.FuelNameCanNotBeDuplicatedWhenInserted(request.Name);
 
                 var mappedFuel = _mapper.Map<Fuel>(request);
                 var createdFuel = await _fuelRepository.AddAsync(mappedFuel);
-                return createdFuel;
+                CreateFuelListDto createFuelListDto = _mapper.Map<CreateFuelListDto>(createdFuel);
+
+                return createFuelListDto;
             }
         }
     }
