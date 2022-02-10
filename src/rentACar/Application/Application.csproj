@@ -19,10 +19,16 @@
     <ProjectReference Include="..\..\corePackages\Core.CrossCuttingConcerns\Core.CrossCuttingConcerns.csproj" />
     <ProjectReference Include="..\..\corePackages\Core.Mailing\Core.Mailing.csproj" />
     <ProjectReference Include="..\..\corePackages\Core.Persistence\Core.Persistence.csproj" />
+    <ProjectReference Include="..\..\corePackages\Core.Security\Core.Security.csproj" />
     <ProjectReference Include="..\Domain\Domain.csproj" />
   </ItemGroup>
 
   <ItemGroup>
+    <Folder Include="Features\Auths\Dtos\" />
+    <Folder Include="Features\Auths\Models\" />
+    <Folder Include="Features\Auths\Profiles\" />
+    <Folder Include="Features\Auths\Queries\" />
+    <Folder Include="Features\Auths\Tests\" />
     <Folder Include="Features\Brands\Tests\" />
     <Folder Include="Features\Cars\Tests\" />
     <Folder Include="Features\Colors\Tests\" />
@@ -34,6 +40,12 @@
     <Folder Include="Features\Models\Tests\" />
     <Folder Include="Features\Rentals\Tests\" />
     <Folder Include="Features\Transmissions\Tests\" />
+    <Folder Include="Features\Users\Commands\DeleteUser\" />
+    <Folder Include="Features\Users\Commands\UpdateUser\" />
+    <Folder Include="Features\Users\Models\" />
+    <Folder Include="Features\Users\Tests\" />
+    <Folder Include="Features\Users\Queries\" />
+    <Folder Include="Features\Users\Rules\" />
   </ItemGroup>
 
 </Project>

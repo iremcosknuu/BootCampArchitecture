@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Core.Persistence.Repositories;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -6,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace Domain.Entities
 {
-    public class CorporateCustomer:Customer
+    public class CorporateCustomer:Entity
     {
 
         public CorporateCustomer()
@@ -14,11 +15,10 @@ namespace Domain.Entities
 
         }
 
-        public CorporateCustomer(int id, string email,string companyName, string taxId,int customerId):this()
+        public CorporateCustomer(int id,string companyName, string taxId,int customerId):this()
         {
             Id = id;
             CustomerId = customerId;
-            Email = email;
             CompanyName = companyName;
             TaxId = taxId;
         }

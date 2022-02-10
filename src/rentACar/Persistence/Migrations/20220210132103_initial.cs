@@ -62,6 +62,19 @@ namespace Persistence.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "OperationClaims",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Name = table.Column<string>(type: "nvarchar(max)", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_OperationClaims", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "Transmissions",
                 columns: table => new
                 {
@@ -75,10 +88,29 @@ namespace Persistence.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "Users",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    FirstName = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    LastName = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Email = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    PasswordSalt = table.Column<byte[]>(type: "varbinary(max)", nullable: false),
+                    PasswordHash = table.Column<byte[]>(type: "varbinary(max)", nullable: false),
+                    Status = table.Column<bool>(type: "bit", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Users", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "CorporateCustomers",
                 columns: table => new
                 {
-                    Id = table.Column<int>(type: "int", nullable: false),
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
                     CustomerId = table.Column<int>(type: "int", nullable: false),
                     CompanyName = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     TaxId = table.Column<string>(type: "nvarchar(max)", nullable: false)
@@ -86,24 +118,20 @@ namespace Persistence.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_CorporateCustomers", x => x.Id);
-                    //table.ForeignKey(
-                    //    name: "FK_CorporateCustomers_Customers_CustomerId",
-                    //    column: x => x.CustomerId,
-                    //    principalTable: "Customers",
-                    //    principalColumn: "Id",
-                    //    onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_CorporateCustomers_Customers_Id",
-                        column: x => x.Id,
+                        name: "FK_CorporateCustomers_Customers_CustomerId",
+                        column: x => x.CustomerId,
                         principalTable: "Customers",
-                        principalColumn: "Id");
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
                 name: "IndividualCustomers",
                 columns: table => new
                 {
-                    Id = table.Column<int>(type: "int", nullable: false),
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
                     CustomerId = table.Column<int>(type: "int", nullable: false),
                     CompanyName = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     LastName = table.Column<string>(type: "nvarchar(max)", nullable: false),
@@ -112,17 +140,12 @@ namespace Persistence.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_IndividualCustomers", x => x.Id);
-                    //table.ForeignKey(
-                    //    name: "FK_IndividualCustomers_Customers_CustomerId",
-                    //    column: x => x.CustomerId,
-                    //    principalTable: "Customers",
-                    //    principalColumn: "Id",
-                    //    onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_IndividualCustomers_Customers_Id",
-                        column: x => x.Id,
+                        name: "FK_IndividualCustomers_Customers_CustomerId",
+                        column: x => x.CustomerId,
                         principalTable: "Customers",
-                        principalColumn: "Id");
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
@@ -162,6 +185,32 @@ namespace Persistence.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "UserOperationClaims",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    UserId = table.Column<int>(type: "int", nullable: false),
+                    OperationClaimId = table.Column<int>(type: "int", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_UserOperationClaims", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_UserOperationClaims_OperationClaims_OperationClaimId",
+                        column: x => x.OperationClaimId,
+                        principalTable: "OperationClaims",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_UserOperationClaims_Users_UserId",
+                        column: x => x.UserId,
+                        principalTable: "Users",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "Cars",
                 columns: table => new
                 {
@@ -171,7 +220,8 @@ namespace Persistence.Migrations
                     ModelId = table.Column<int>(type: "int", nullable: false),
                     Plate = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     ModelYear = table.Column<short>(type: "smallint", nullable: false),
-                    State = table.Column<int>(type: "int", nullable: false)
+                    State = table.Column<int>(type: "int", nullable: false),
+                    FindexScore = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -242,6 +292,36 @@ namespace Persistence.Migrations
                         onDelete: ReferentialAction.Cascade);
                 });
 
+            migrationBuilder.CreateTable(
+                name: "Invoices",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    RentalId = table.Column<int>(type: "int", nullable: false),
+                    CustomerId = table.Column<int>(type: "int", nullable: false),
+                    InvoiceNumber = table.Column<int>(type: "int", nullable: false),
+                    InvoicedDate = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    TotalRentalDate = table.Column<int>(type: "int", nullable: false),
+                    TotalPrice = table.Column<double>(type: "float", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Invoices", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Invoices_Customers_CustomerId",
+                        column: x => x.CustomerId,
+                        principalTable: "Customers",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.NoAction);
+                    table.ForeignKey(
+                        name: "FK_Invoices_Rentals_RentalId",
+                        column: x => x.RentalId,
+                        principalTable: "Rentals",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.NoAction);
+                });
+
             migrationBuilder.InsertData(
                 table: "Brands",
                 columns: new[] { "Id", "Name" },
@@ -290,13 +370,13 @@ namespace Persistence.Migrations
 
             migrationBuilder.InsertData(
                 table: "Cars",
-                columns: new[] { "Id", "State", "ColorId", "ModelId", "ModelYear", "Plate" },
-                values: new object[] { 1, 1, 1, 1, (short)2018, "06ABC06" });
+                columns: new[] { "Id", "State", "ColorId", "FindexScore", "ModelId", "ModelYear", "Plate" },
+                values: new object[] { 1, 1, 1, 1750, 1, (short)2018, "06ABC06" });
 
             migrationBuilder.InsertData(
                 table: "Cars",
-                columns: new[] { "Id", "State", "ColorId", "ModelId", "ModelYear", "Plate" },
-                values: new object[] { 2, 1, 2, 2, (short)2018, "34ABC34" });
+                columns: new[] { "Id", "State", "ColorId", "FindexScore", "ModelId", "ModelYear", "Plate" },
+                values: new object[] { 2, 1, 2, 1520, 2, (short)2018, "34ABC34" });
 
             migrationBuilder.CreateIndex(
                 name: "IX_Cars_ColorId",
@@ -311,12 +391,24 @@ namespace Persistence.Migrations
             migrationBuilder.CreateIndex(
                 name: "IX_CorporateCustomers_CustomerId",
                 table: "CorporateCustomers",
-                column: "CustomerId");
+                column: "CustomerId",
+                unique: true);
 
             migrationBuilder.CreateIndex(
                 name: "IX_IndividualCustomers_CustomerId",
                 table: "IndividualCustomers",
+                column: "CustomerId",
+                unique: true);
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Invoices_CustomerId",
+                table: "Invoices",
                 column: "CustomerId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Invoices_RentalId",
+                table: "Invoices",
+                column: "RentalId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Maintenances_CarId",
@@ -347,6 +439,16 @@ namespace Persistence.Migrations
                 name: "IX_Rentals_CustomerId",
                 table: "Rentals",
                 column: "CustomerId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_UserOperationClaims_OperationClaimId",
+                table: "UserOperationClaims",
+                column: "OperationClaimId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_UserOperationClaims_UserId",
+                table: "UserOperationClaims",
+                column: "UserId");
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)
@@ -358,10 +460,22 @@ namespace Persistence.Migrations
                 name: "IndividualCustomers");
 
             migrationBuilder.DropTable(
+                name: "Invoices");
+
+            migrationBuilder.DropTable(
                 name: "Maintenances");
 
             migrationBuilder.DropTable(
+                name: "UserOperationClaims");
+
+            migrationBuilder.DropTable(
                 name: "Rentals");
+
+            migrationBuilder.DropTable(
+                name: "OperationClaims");
+
+            migrationBuilder.DropTable(
+                name: "Users");
 
             migrationBuilder.DropTable(
                 name: "Cars");

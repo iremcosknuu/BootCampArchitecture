@@ -1,4 +1,5 @@
-﻿using Domain.Entities;
+﻿using Core.Security.Entities;
+using Domain.Entities;
 using Domain.Entities;
 using Domain.Enums;
 using Microsoft.EntityFrameworkCore;
@@ -27,6 +28,9 @@ namespace Persistence
         public DbSet<IndividualCustomer> IndividualCustomers { get; set; }
         public DbSet<CorporateCustomer> CorporateCustomers { get; set; }
         public DbSet<Invoice> Invoices { get; set; }
+        public DbSet<User> Users { get; set; }
+        public DbSet<OperationClaim> OperationClaims { get; set; }
+        public DbSet<UserOperationClaim> UserOperationClaims { get; set; }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
@@ -141,7 +145,8 @@ namespace Persistence
 
             modelBuilder.Entity<CorporateCustomer>(b =>
             {
-                b.ToTable("CorporateCustomers");
+                b.ToTable("CorporateCustomers").HasKey(p => p.Id);
+                b.Property(p => p.Id).HasColumnName("Id");
                 b.Property(p => p.CustomerId).HasColumnName("CustomerId");
                 b.Property(p => p.CompanyName).HasColumnName("CompanyName");
                 b.Property(p => p.TaxId).HasColumnName("TaxId");
@@ -150,7 +155,8 @@ namespace Persistence
 
             modelBuilder.Entity<IndividualCustomer>(b =>
             {
-                b.ToTable("IndividualCustomers");
+                b.ToTable("IndividualCustomers").HasKey(p => p.Id);
+                b.Property(p => p.Id).HasColumnName("Id");
                 b.Property(p => p.CustomerId).HasColumnName("CustomerId");
                 b.Property(p => p.FirstName).HasColumnName("CompanyName");
                 b.Property(p => p.LastName).HasColumnName("LastName");
@@ -160,14 +166,47 @@ namespace Persistence
 
             modelBuilder.Entity<Invoice>(b =>
             {
-                b.ToTable("Invoices");
-                b.Property(p => p.Id).HasColumnName("id");
+                b.ToTable("Invoices").HasKey(p => p.Id);
+                b.Property(p => p.Id).HasColumnName("Id");
                 b.Property(p => p.CustomerId).HasColumnName("CustomerId");
                 b.Property(p => p.RentalId).HasColumnName("RentalId");
                 b.Property(p => p.InvoiceNumber).HasColumnName("InvoiceNumber");
                 b.Property(p => p.InvoicedDate).HasColumnName("InvoicedDate");
                 b.Property(p => p.TotalRentalDate).HasColumnName("TotalRentalDate");
                 b.Property(p => p.TotalPrice).HasColumnName("TotalPrice");
+                b.HasOne(p => p.Rental);
+                b.HasOne(p => p.Customer);
+            });
+
+            modelBuilder.Entity<User>(b =>
+            {
+                b.ToTable("Users").HasKey(p => p.Id);
+                b.Property(p => p.Id).HasColumnName("Id");
+                b.Property(p => p.FirstName).HasColumnName("FirstName");
+                b.Property(p => p.LastName).HasColumnName("LastName");
+                b.Property(p => p.Email).HasColumnName("Email");
+                b.Property(p => p.PasswordSalt).HasColumnName("PasswordSalt");
+                b.Property(p => p.PasswordHash).HasColumnName("PasswordHash");
+                b.Property(p => p.Status).HasColumnName("Status");
+                b.HasMany(p => p.UserOperationClaims);
+            });
+
+            modelBuilder.Entity<UserOperationClaim>(b =>
+            {
+                b.ToTable("UserOperationClaims").HasKey(p => p.Id);
+                b.Property(p => p.Id).HasColumnName("Id");
+                b.Property(p => p.UserId).HasColumnName("UserId");
+                b.Property(p => p.OperationClaimId).HasColumnName("OperationClaimId");
+                b.HasOne(p => p.User);
+                b.HasOne(p => p.OperationClaim);
+            });
+
+            modelBuilder.Entity<OperationClaim>(b =>
+            {
+                b.ToTable("OperationClaims").HasKey(p => p.Id);
+                b.Property(p => p.Id).HasColumnName("Id");
+                b.Property(p => p.Name).HasColumnName("Name");
+
             });
 
             var brand1 = new Brand(1, "BMW");

@@ -14,7 +14,7 @@ namespace Domain.Entities
 
         }
 
-        public Invoice(int rentalId, int customerId, int invoiceNumber, DateTime invoicedDate, int totalRentalDate, double totalPrice,int id):this()
+        public Invoice(int id,int rentalId, int customerId, int invoiceNumber, DateTime invoicedDate, int totalRentalDate, double totalPrice):this()
         {
             Id = id;
             RentalId = rentalId;

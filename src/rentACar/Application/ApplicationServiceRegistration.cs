@@ -1,4 +1,5 @@
-﻿using Application.Features.Brands.Rules;
+﻿using Application.Features.Auths.Rules;
+using Application.Features.Brands.Rules;
 using Application.Features.Cars.Rules;
 using Application.Features.Colors.Rules;
 using Application.Features.CorporateCustomers.Rules;
@@ -8,7 +9,9 @@ using Application.Features.Invoices.Rules;
 using Application.Features.Maintenances.Rules;
 using Application.Features.Rentals.Rules;
 using Application.Features.Transmissions.Rules;
+using Application.Services.Auths;
 using Core.Application.Pipelines.Validation;
+using Core.Security.Jwt;
 using FluentValidation;
 using MediatR;
 using Microsoft.Extensions.DependencyInjection;
@@ -40,6 +43,10 @@ namespace Application
             services.AddScoped<IndividualCustomerBusienessRules>();
             services.AddScoped<CorporateCustomerBusienessRules>();
             services.AddScoped<InvoiceBusienessRules>();
+            services.AddScoped<AuthBusienessRules>();
+
+            services.AddSingleton<ITokenHelper, JwtHelper>();
+            services.AddScoped<IAuthService, AuthManager>();
 
             services.AddTransient(typeof(IPipelineBehavior<,>), typeof(RequestValidationBehavior<,>));
 
