@@ -3,6 +3,7 @@ using Application.Features.Brands.Dtos;
 using Application.Features.Brands.Rules;
 using Application.Services.Repositories;
 using AutoMapper;
+using Core.Application.Pipelines.Logging;
 using Core.Mailing;
 using Domain.Entities;
 using MediatR;
@@ -14,7 +15,7 @@ using System.Threading.Tasks;
 
 namespace Application.Features.Brands.Commands.CreateBrand
 {
-    public class CreateBrandCommand : IRequest<CreateBrandListDto>
+    public class CreateBrandCommand : IRequest<CreateBrandListDto>,ILoggableRequest
     {
         public string Name { get; set; }
 

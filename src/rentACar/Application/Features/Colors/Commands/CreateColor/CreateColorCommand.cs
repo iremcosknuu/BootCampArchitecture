@@ -1,6 +1,7 @@
 ﻿using Application.Features.Colors.Rules;
 using Application.Services.Repositories;
 using AutoMapper;
+using Core.Application.Pipelines.Logging;
 using Domain.Entities;
 using MediatR;
 using System;
@@ -11,7 +12,7 @@ using System.Threading.Tasks;
 
 namespace Application.Features.Colors.Commands.CreateColor
 {
-    public class CreateColorCommand:IRequest<Color>
+    public class CreateColorCommand:IRequest<Color>, ILoggableRequest
     {
         public string Name { get; set; }
 

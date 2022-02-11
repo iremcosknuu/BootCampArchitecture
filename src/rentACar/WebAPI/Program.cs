@@ -12,7 +12,7 @@ builder.Services.AddControllers();
 
 builder.Services.AddApplicationServices();
 builder.Services.AddPersistenceServices(builder.Configuration);
-builder.Services.AddSingleton<IMailService, MailkitMailService>();
+builder.Services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
 
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();

@@ -10,7 +10,12 @@ using Application.Features.Maintenances.Rules;
 using Application.Features.Rentals.Rules;
 using Application.Features.Transmissions.Rules;
 using Application.Services.Auths;
+using Core.Application.Pipelines.Logging;
 using Core.Application.Pipelines.Validation;
+using Core.CrossCuttingConcerns.Logging;
+using Core.CrossCuttingConcerns.Logging.Serilog;
+using Core.Mailing;
+using Core.Mailing.MailkitImplementations;
 using Core.Security.Jwt;
 using FluentValidation;
 using MediatR;
@@ -45,10 +50,13 @@ namespace Application
             services.AddScoped<InvoiceBusienessRules>();
             services.AddScoped<AuthBusienessRules>();
 
-            services.AddSingleton<ITokenHelper, JwtHelper>();
             services.AddScoped<IAuthService, AuthManager>();
+            services.AddSingleton<ITokenHelper, JwtHelper>();
+            services.AddSingleton<IMailService, MailkitMailService>();
+            services.AddSingleton<LoggerServiceBase, FileLogger>();
 
             services.AddTransient(typeof(IPipelineBehavior<,>), typeof(RequestValidationBehavior<,>));
+            services.AddTransient(typeof(IPipelineBehavior<,>), typeof(LoggingBehavior<,>));
 
             return services;
         }
